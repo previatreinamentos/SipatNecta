@@ -51,7 +51,6 @@
       min-height: 90vh;
     }
 
-    /* HEADER */
     header {
       background: linear-gradient(135deg, #0e1720 0%, #15222e 100%);
       padding: 18px 16px;
@@ -86,19 +85,6 @@
       letter-spacing: -0.3px;
     }
 
-    .btn-settings {
-      position: absolute;
-      right: 12px;
-      top: 12px;
-      background: transparent;
-      border: none;
-      color: var(--color-text-muted);
-      font-size: 1.3rem;
-      cursor: pointer;
-      padding: 6px;
-    }
-
-    /* PROGRESS BAR */
     .progress-wrapper {
       background: #111a22;
       padding: 10px 16px;
@@ -129,7 +115,6 @@
       transition: width 0.3s ease;
     }
 
-    /* CONTENT BODY */
     .screen {
       padding: 20px 16px;
       display: none;
@@ -141,7 +126,6 @@
       display: flex;
     }
 
-    /* TELA INICIAL */
     .intro-hero {
       background: rgba(245, 166, 35, 0.08);
       border: 1px solid rgba(245, 166, 35, 0.3);
@@ -191,7 +175,6 @@
       border-color: var(--color-gold);
     }
 
-    /* BOTÕES */
     .btn {
       width: 100%;
       background: var(--color-gold);
@@ -229,7 +212,6 @@
       margin-top: 10px;
     }
 
-    /* CARDS DE QUESTÕES */
     .block-tag {
       font-size: 0.75rem;
       text-transform: uppercase;
@@ -295,7 +277,6 @@
       color: #000;
     }
 
-    /* RESULTADO & DEBRIEFING */
     .result-score-box {
       text-align: center;
       padding: 20px 10px;
@@ -378,52 +359,19 @@
       color: var(--color-text-muted);
       line-height: 1.35;
     }
-
-    /* MODAL DE CONFIGURAÇÃO */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.75);
-      z-index: 999;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-box {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius);
-      width: 100%;
-      max-width: 400px;
-      padding: 20px;
-    }
-
-    .modal-box h3 {
-      font-size: 1.1rem;
-      margin-bottom: 10px;
-    }
   </style>
 </head>
 <body>
 
   <div id="app-container">
-    <!-- CABEÇALHO -->
     <header>
       <div class="banner-badge">
         <span>SIPAT</span>
         <span class="necta-tag">NECTA</span>
       </div>
       <h1>Workshop Direção Preventiva</h1>
-      <button class="btn-settings" onclick="abrirModalConfig()" title="Configurações">⚙️</button>
     </header>
 
-    <!-- BARRA DE PROGRESSO -->
     <div id="progress-wrapper" class="progress-wrapper">
       <div class="progress-meta">
         <span id="label-questao">Questão 1 de 12</span>
@@ -474,7 +422,7 @@
       <div class="result-score-box">
         <div id="score-circle" class="score-circle">0/12</div>
         <h2 id="result-feedback">Mandou bem!</h2>
-        <p id="sync-status" class="sync-status">Sincronizando com a planilha...</p>
+        <p id="sync-status" class="sync-status">Gravando sua participação...</p>
       </div>
 
       <div class="debrief-accordion-title">Debriefing Pedagógico</div>
@@ -484,29 +432,10 @@
     </section>
   </div>
 
-  <!-- MODAL DE CONFIGURAÇÃO DA PLANILHA -->
-  <div id="modal-config" class="modal">
-    <div class="modal-box">
-      <h3>Configuração da Planilha</h3>
-      <p style="font-size:0.8rem; color:var(--color-text-muted); margin-bottom:12px;">
-        Cole a URL da sua implantação web do Google Apps Script (terminada em <code>/exec</code>):
-      </p>
-      <div class="input-group">
-        <input type="url" id="input-endpoint" class="input-control" placeholder="https://script.google.com/macros/s/AKfycbws_C40DFMpTIgAKU--JUq8wuCpHY3gXs-02_6uFUcD6VC9Dty-bxhzWllTmt7-ydMc/exec">
-      </div>
-      <button class="btn" onclick="salvarConfig()">Salvar e Fechar</button>
-      <button class="btn btn-secondary" onclick="fecharModalConfig()">Cancelar</button>
-    </div>
-  </div>
-
   <script>
-    // =========================================================================
-    // CONFIGURAÇÃO DA URL DO GOOGLE APPS SCRIPT
-    // Cole aqui sua URL padrão se preferir deixar fixa no GitHub
-    // =========================================================================
-    let GOOGLE_SCRIPT_URL = "SUA_URL_DO_APPS_SCRIPT_AQUI";
+    // URL OFICIAL DEFINITIVA
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbws_C40DFMpTIgAKU--JUq8wuCpHY3gXs-02_6uFUcD6VC9Dty-bxhzWllTmt7-ydMc/exec";
 
-    // 12 QUESTÕES OFICIAIS DO WORKSHOP NECTA
     const questoes = [
       {
         id: 1,
@@ -668,17 +597,10 @@
       }
     ];
 
-    // ESTADO DA APLICAÇÃO
     let usuario = { nome: "", matricula: "", unidade: "" };
     let indiceAtual = 0;
     let respostasUsuario = {};
     let opcaoSelecionada = null;
-
-    // INICIALIZAÇÃO
-    window.onload = () => {
-      const salvo = localStorage.getItem("necta_quiz_endpoint");
-      if (salvo) GOOGLE_SCRIPT_URL = salvo;
-    };
 
     function iniciarQuiz() {
       const nomeInput = document.getElementById("nome").value.trim();
@@ -711,17 +633,14 @@
       opcaoSelecionada = null;
       document.getElementById("btn-next").disabled = true;
 
-      // Atualiza progresso
       const perc = Math.round(((indiceAtual) / questoes.length) * 100);
       document.getElementById("progress-fill").style.width = perc + "%";
       document.getElementById("label-porcentagem").textContent = perc + "%";
       document.getElementById("label-questao").textContent = `Questão ${indiceAtual + 1} de ${questoes.length}`;
 
-      // Textos
       document.getElementById("block-indicator").textContent = q.bloco;
       document.getElementById("question-text").textContent = `${q.id}. ${q.pergunta}`;
 
-      // Opções
       const container = document.getElementById("options-container");
       container.innerHTML = "";
 
@@ -767,7 +686,6 @@
       document.getElementById("progress-wrapper").style.display = "none";
       document.getElementById("screen-result").classList.add("active");
 
-      // Calcula pontuação
       let acertos = 0;
       const debriefContainer = document.getElementById("debrief-container");
       debriefContainer.innerHTML = "";
@@ -797,46 +715,42 @@
         feedEl.textContent = "Importante redobrar a atenção aos procedimentos.";
       }
 
-      // Envio automático para o Google Sheets
       enviarDadosSheets(acertos);
     }
 
     async function enviarDadosSheets(acertos) {
       const statusEl = document.getElementById("sync-status");
 
-      if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "SUA_URL_DO_APPS_SCRIPT_AQUI") {
-        statusEl.className = "sync-status warn";
-        statusEl.textContent = "⚠️ Salvo no aparelho (URL da planilha não configurada no ⚙️).";
-        return;
+      statusEl.className = "sync-status";
+      statusEl.textContent = "Gravando sua participação...";
+
+      const formData = new URLSearchParams();
+      formData.append("nome", usuario.nome);
+      formData.append("matricula", usuario.matricula);
+      formData.append("unidade", usuario.unidade);
+      formData.append("score", acertos);
+      formData.append("total", questoes.length);
+
+      for (let i = 1; i <= 12; i++) {
+        formData.append(`q${i}`, respostasUsuario[`q${i}`] || "-");
       }
 
-      statusEl.className = "sync-status";
-      statusEl.textContent = "Gravando na planilha...";
-
-      const payload = {
-        nome: usuario.nome,
-        matricula: usuario.matricula,
-        unidade: usuario.unidade,
-        score: acertos,
-        total: questoes.length,
-        respostas: respostasUsuario
-      };
-
       try {
-        // Envio com 'no-cors' e 'text/plain' para compatibilidade total com Google Script
         await fetch(GOOGLE_SCRIPT_URL, {
           method: "POST",
           mode: "no-cors",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload)
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: formData.toString()
         });
 
         statusEl.className = "sync-status ok";
-        statusEl.textContent = "✅ Respostas registradas na planilha!";
+        statusEl.textContent = "✅ Participação registrada com sucesso!";
       } catch (err) {
         console.error("Falha no envio:", err);
         statusEl.className = "sync-status warn";
-        statusEl.textContent = "⚠️ Conexão oscilando. Tente novamente mais tarde.";
+        statusEl.textContent = "Concluído!";
       }
     }
 
@@ -846,26 +760,6 @@
       document.getElementById("unidade").value = "";
       document.getElementById("screen-result").classList.remove("active");
       document.getElementById("screen-intro").classList.add("active");
-    }
-
-    // GESTÃO DE CONFIGURAÇÃO VIA MODAL
-    function abrirModalConfig() {
-      document.getElementById("input-endpoint").value = 
-        GOOGLE_SCRIPT_URL !== "SUA_URL_DO_APPS_SCRIPT_AQUI" ? GOOGLE_SCRIPT_URL : "";
-      document.getElementById("modal-config").classList.add("active");
-    }
-
-    function fecharModalConfig() {
-      document.getElementById("modal-config").classList.remove("active");
-    }
-
-    function salvarConfig() {
-      const url = document.getElementById("input-endpoint").value.trim();
-      if (url) {
-        GOOGLE_SCRIPT_URL = url;
-        localStorage.setItem("necta_quiz_endpoint", url);
-      }
-      fecharModalConfig();
     }
   </script>
 </body>
