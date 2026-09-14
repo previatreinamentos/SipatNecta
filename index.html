@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Workshop Direção Preventiva | SIPAT Necta</title>
-  <!-- Chart.js para renderizar os gráficos do Dashboard Admin -->
+  <!-- Chart.js para renderizar os gráficos dos Dashboards -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
@@ -54,9 +54,8 @@
       transition: max-width 0.3s ease;
     }
 
-    /* Expansão responsiva suave apenas quando estiver na tela admin */
     #app-container.admin-expanded {
-      max-width: 900px;
+      max-width: 920px;
     }
 
     header {
@@ -93,7 +92,6 @@
       letter-spacing: -0.3px;
     }
 
-    /* Botão discreto no canto superior direito */
     .btn-admin-discreto {
       position: absolute;
       right: 12px;
@@ -207,6 +205,11 @@
       border-color: var(--color-gold);
     }
 
+    textarea.input-control {
+      min-height: 75px;
+      resize: vertical;
+    }
+
     .btn {
       width: 100%;
       background: var(--color-gold);
@@ -242,6 +245,16 @@
       border: 1px solid var(--color-border);
       color: var(--color-text);
       margin-top: 10px;
+    }
+
+    .btn-action-reacao {
+      background: linear-gradient(135deg, var(--color-green) 0%, #008f4c 100%);
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .btn-action-reacao:active {
+      background: var(--color-green-dark);
     }
 
     .block-tag {
@@ -309,6 +322,38 @@
       color: #000;
     }
 
+    /* ESCALAS (1 a 5 e NPS 0 a 10) */
+    .scale-row {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-top: 6px;
+    }
+
+    .scale-btn {
+      flex: 1;
+      min-width: 38px;
+      height: 44px;
+      background: var(--color-surface-card);
+      border: 1px solid var(--color-border);
+      color: #fff;
+      font-weight: 700;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .scale-btn.selected {
+      background: var(--color-gold);
+      color: #000;
+      border-color: var(--color-gold);
+    }
+
     .result-score-box {
       text-align: center;
       padding: 20px 10px;
@@ -360,7 +405,7 @@
     }
 
     .debrief-list {
-      max-height: 280px;
+      max-height: 260px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -392,38 +437,42 @@
       line-height: 1.35;
     }
 
-    /* MODAL DE LOGIN ADMIN */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.85);
-      z-index: 999;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
+    /* ESTILOS DO PAINEL ADMIN */
+    .admin-nav-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 8px;
     }
 
-    .modal.active {
+    .tab-btn {
+      background: transparent;
+      border: 1px solid var(--color-border);
+      color: var(--color-text-muted);
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--color-gold);
+      color: #000;
+      border-color: var(--color-gold);
+    }
+
+    .admin-sub-tab {
+      display: none;
+      flex-direction: column;
+    }
+
+    .admin-sub-tab.active {
       display: flex;
     }
 
-    .modal-box {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius);
-      width: 100%;
-      max-width: 360px;
-      padding: 22px;
-    }
-
-    .modal-box h3 {
-      font-size: 1.15rem;
-      margin-bottom: 6px;
-      color: var(--color-gold);
-    }
-
-    /* ESTILOS DO DASHBOARD ADMIN */
     .admin-header-bar {
       display: flex;
       justify-content: space-between;
@@ -450,7 +499,7 @@
 
     .kpi-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
       gap: 10px;
       margin-bottom: 16px;
     }
@@ -503,7 +552,7 @@
       border-radius: 8px;
       padding: 12px;
       overflow-x: auto;
-      max-height: 240px;
+      max-height: 250px;
       margin-bottom: 16px;
     }
 
@@ -527,6 +576,73 @@
       white-space: nowrap;
       color: var(--color-text-muted);
     }
+
+    /* MURAL DE FEEDBACKS */
+    .feedback-mural {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+
+    .feedback-card {
+      background: #15202b;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.82rem;
+    }
+
+    .feedback-card .meta {
+      font-weight: bold;
+      color: var(--color-gold);
+      margin-bottom: 6px;
+      font-size: 0.8rem;
+    }
+
+    .feedback-item {
+      margin-bottom: 6px;
+      color: #e4eaf0;
+      line-height: 1.35;
+    }
+
+    .feedback-item strong {
+      color: var(--color-text-muted);
+      font-size: 0.78rem;
+      display: block;
+    }
+
+    /* MODAL DE LOGIN ADMIN */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 360px;
+      padding: 22px;
+    }
+
+    .modal-box h3 {
+      font-size: 1.15rem;
+      margin-bottom: 6px;
+      color: var(--color-gold);
+    }
   </style>
 </head>
 <body>
@@ -538,7 +654,6 @@
         <span class="necta-tag">NECTA</span>
       </div>
       <h1>Workshop Direção Preventiva</h1>
-      <!-- Botão discreto no canto superior direito -->
       <button class="btn-admin-discreto" onclick="abrirModalAdmin()">Administração</button>
     </header>
 
@@ -577,7 +692,7 @@
       <button class="btn" onclick="iniciarQuiz()">Começar Desafio ➔</button>
     </section>
 
-    <!-- TELA 2: QUIZ -->
+    <!-- TELA 2: QUIZ TÉCNICO -->
     <section id="screen-quiz" class="screen">
       <div id="block-indicator" class="block-tag">BLOCO 1</div>
       <div id="question-text" class="question-title">Carregando pergunta...</div>
@@ -598,10 +713,134 @@
       <div class="debrief-accordion-title">Debriefing Pedagógico</div>
       <div id="debrief-container" class="debrief-list"></div>
 
-      <button class="btn" onclick="reiniciar()">Novo Participante</button>
+      <!-- BOTÃO PARA AVALIAÇÃO DE REAÇÃO -->
+      <button class="btn btn-action-reacao" onclick="abrirAvaliacaoReacao()">Avaliação de Reação ➔</button>
+      <button class="btn btn-secondary" onclick="reiniciar()">Novo Participante</button>
     </section>
 
-    <!-- TELA 4: DASHBOARD ADMIN -->
+    <!-- TELA 4: FORMULÁRIO DE AVALIAÇÃO DE REAÇÃO -->
+    <section id="screen-reacao" class="screen">
+      <div class="intro-hero">
+        <h2>Pesquisa de Avaliação do Workshop</h2>
+        <p>Sua opinião é fundamental para o aprimoramento contínuo das nossas ações de treinamento.</p>
+      </div>
+
+      <form id="form-reacao" onsubmit="event.preventDefault(); enviarReacao();">
+        <!-- Q1 -->
+        <div class="input-group">
+          <label>1. O Workshop agregou novos conhecimentos? *</label>
+          <div class="options-list">
+            <div class="option-card r-opt" onclick="selOpcaoReacao('r_q1', this, 'Concordo totalmente')">
+              <div class="option-indicator">●</div><div>Concordo totalmente</div>
+            </div>
+            <div class="option-card r-opt" onclick="selOpcaoReacao('r_q1', this, 'Concordo parcialmente')">
+              <div class="option-indicator">●</div><div>Concordo parcialmente</div>
+            </div>
+            <div class="option-card r-opt" onclick="selOpcaoReacao('r_q1', this, 'Neutro')">
+              <div class="option-indicator">●</div><div>Neutro</div>
+            </div>
+            <div class="option-card r-opt" onclick="selOpcaoReacao('r_q1', this, 'Discordo parcialmente')">
+              <div class="option-indicator">●</div><div>Discordo parcialmente</div>
+            </div>
+            <div class="option-card r-opt" onclick="selOpcaoReacao('r_q1', this, 'Discordo totalmente')">
+              <div class="option-indicator">●</div><div>Discordo totalmente</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="input-group">
+          <label>2. Você teria a intenção de adotar alguma das práticas sugeridas nos próximos 6–12 meses? *</label>
+          <div class="options-list">
+            <div class="option-card r-opt" onclick="selOpcaoReacao('r_q2', this, 'Sim')">
+              <div class="option-indicator">●</div><div>Sim</div>
+            </div>
+            <div class="option-card r-opt" onclick="selOpcaoReacao('r_q2', this, 'Não')">
+              <div class="option-indicator">●</div><div>Não</div>
+            </div>
+            <div class="option-card r-opt" onclick="selOpcaoReacao('r_q2', this, 'Talvez')">
+              <div class="option-indicator">●</div><div>Talvez</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="input-group">
+          <label>3. Em uma escala de 1 a 5, quanto você se sente preparado(a) para aplicar o que foi aprendido no dia a dia? *</label>
+          <div class="scale-row" id="scale-q3">
+            <div class="scale-btn" onclick="selEscala('r_q3', this, 1)">1</div>
+            <div class="scale-btn" onclick="selEscala('r_q3', this, 2)">2</div>
+            <div class="scale-btn" onclick="selEscala('r_q3', this, 3)">3</div>
+            <div class="scale-btn" onclick="selEscala('r_q3', this, 4)">4</div>
+            <div class="scale-btn" onclick="selEscala('r_q3', this, 5)">5</div>
+          </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="input-group">
+          <label>4. Numa escala de 0 até 10, quais as chances de você recomendar esse workshop para alguém? (NPS) *</label>
+          <div class="scale-row" id="scale-q4">
+            <div class="scale-btn" onclick="selEscala('r_q4', this, 0)">0</div>
+            <div class="scale-btn" onclick="selEscala('r_q4', this, 1)">1</div>
+            <div class="scale-btn" onclick="selEscala('r_q4', this, 2)">2</div>
+            <div class="scale-btn" onclick="selEscala('r_q4', this, 3)">3</div>
+            <div class="scale-btn" onclick="selEscala('r_q4', this, 4)">4</div>
+            <div class="scale-btn" onclick="selEscala('r_q4', this, 5)">5</div>
+            <div class="scale-btn" onclick="selEscala('r_q4', this, 6)">6</div>
+            <div class="scale-btn" onclick="selEscala('r_q4', this, 7)">7</div>
+            <div class="scale-btn" onclick="selEscala('r_q4', this, 8)">8</div>
+            <div class="scale-btn" onclick="selEscala('r_q4', this, 9)">9</div>
+            <div class="scale-btn" onclick="selEscala('r_q4', this, 10)">10</div>
+          </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="input-group">
+          <label for="r_q5">5. Houve algo que você sentiu falta durante o workshop?</label>
+          <textarea id="r_q5" class="input-control" placeholder="Conteúdos, exemplos, dinâmicas, temas específicos etc."></textarea>
+        </div>
+
+        <!-- Q6 -->
+        <div class="input-group">
+          <label for="r_q6">6. Quais aspectos desse tema vão gerar impacto imediato em sua rotina ou empresa?</label>
+          <textarea id="r_q6" class="input-control" placeholder="Descreva os pontos principais..."></textarea>
+        </div>
+
+        <!-- Q7 -->
+        <div class="input-group">
+          <label for="r_q7">7. Quais as principais barreiras que você enxerga para implementar essas ideias/práticas?</label>
+          <textarea id="r_q7" class="input-control" placeholder="Descreva os desafios no contexto..."></textarea>
+        </div>
+
+        <!-- Q8 -->
+        <div class="input-group">
+          <label for="r_q8">8. Que dica e sugestão gostaria de deixar?</label>
+          <textarea id="r_q8" class="input-control" placeholder="Sugestões de melhoria..."></textarea>
+        </div>
+
+        <!-- Q9 -->
+        <div class="input-group">
+          <label for="r_q9">9. Que elogio e palavras positivas gostaria de deixar?</label>
+          <textarea id="r_q9" class="input-control" placeholder="Deixe sua mensagem..."></textarea>
+        </div>
+
+        <button type="submit" id="btn-env-reacao" class="btn">Enviar Avaliação de Reação ➔</button>
+      </form>
+    </section>
+
+    <!-- TELA 5: AGRADECIMENTO FINAL -->
+    <section id="screen-thanks" class="screen">
+      <div class="result-score-box">
+        <div class="score-circle">✓</div>
+        <h2>Obrigado pelo seu Feedback!</h2>
+        <p style="color:var(--color-text-muted); font-size:0.9rem; margin-top:8px;">
+          Sua contribuição é essencial para construirmos um trânsito cada vez mais seguro na Necta.
+        </p>
+      </div>
+      <button class="btn" onclick="reiniciar()">Concluir e Voltar ao Início</button>
+    </section>
+
+    <!-- TELA 6: DASHBOARD ADMIN COMPLETO (2 ABAS) -->
     <section id="screen-admin" class="screen">
       <div class="admin-header-bar">
         <h2>Painel Analítico SIPAT</h2>
@@ -611,57 +850,109 @@
         </div>
       </div>
 
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-title">Participantes</div>
-          <div id="kpi-total" class="kpi-val">0</div>
+      <!-- ABAS SUPERIORES ADMIN -->
+      <div class="admin-nav-tabs">
+        <button id="tab-btn-quiz" class="tab-btn active" onclick="trocarAbaAdmin('quiz')">1. Quiz Técnico</button>
+        <button id="tab-btn-reacao" class="tab-btn" onclick="trocarAbaAdmin('reacao')">2. Avaliação de Reação</button>
+      </div>
+
+      <!-- SUB-ABA 1: QUIZ -->
+      <div id="subtab-quiz" class="admin-sub-tab active">
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-title">Participantes</div>
+            <div id="kpi-total" class="kpi-val">0</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Média Acertos</div>
+            <div id="kpi-media" class="kpi-val">0.0</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Aprovação (≥70%)</div>
+            <div id="kpi-aprov" class="kpi-val">0%</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Ponto Crítico</div>
+            <div id="kpi-critico" class="kpi-val" style="color:var(--color-danger); font-size:1.1rem;">-</div>
+          </div>
         </div>
-        <div class="kpi-card">
-          <div class="kpi-title">Média Acertos</div>
-          <div id="kpi-media" class="kpi-val">0.0</div>
+
+        <div class="chart-container">
+          <h4>Distribuição de Desempenho</h4>
+          <div class="chart-box-wrapper">
+            <canvas id="chartDesempenho"></canvas>
+          </div>
         </div>
-        <div class="kpi-card">
-          <div class="kpi-title">Aprovação (≥70%)</div>
-          <div id="kpi-aprov" class="kpi-val">0%</div>
+
+        <div class="chart-container">
+          <h4>Taxa de Acertos por Questão (Q1 a Q12)</h4>
+          <div class="chart-box-wrapper">
+            <canvas id="chartQuestoes"></canvas>
+          </div>
         </div>
-        <div class="kpi-card">
-          <div class="kpi-title">Ponto Crítico</div>
-          <div id="kpi-critico" class="kpi-val" style="color:var(--color-danger); font-size:1.1rem;">-</div>
+
+        <div class="chart-container">
+          <h4>Últimas Participações Registradas</h4>
+          <div class="table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Data/Hora</th>
+                  <th>Nome</th>
+                  <th>RE</th>
+                  <th>Área</th>
+                  <th>Nota</th>
+                  <th>%</th>
+                </tr>
+              </thead>
+              <tbody id="tabela-admin-corpo">
+                <tr><td colspan="6" style="text-align:center;">Carregando registros...</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
-      <div class="chart-container">
-        <h4>Distribuição de Desempenho</h4>
-        <div class="chart-box-wrapper">
-          <canvas id="chartDesempenho"></canvas>
+      <!-- SUB-ABA 2: REAÇÃO -->
+      <div id="subtab-reacao" class="admin-sub-tab">
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-title">Avaliações</div>
+            <div id="kpi-r-total" class="kpi-val">0</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Score NPS</div>
+            <div id="kpi-r-nps" class="kpi-val">0</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Nível Preparo</div>
+            <div id="kpi-r-preparo" class="kpi-val">0.0/5</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Adesão Prática</div>
+            <div id="kpi-r-adesao" class="kpi-val">0%</div>
+          </div>
         </div>
-      </div>
 
-      <div class="chart-container">
-        <h4>Índice de Acerto por Questão (Q1 a Q12)</h4>
-        <div class="chart-box-wrapper">
-          <canvas id="chartQuestoes"></canvas>
+        <div class="chart-container">
+          <h4>Workshop Agregou Novos Conhecimentos?</h4>
+          <div class="chart-box-wrapper">
+            <canvas id="chartConhecimento"></canvas>
+          </div>
         </div>
-      </div>
 
-      <div class="chart-container">
-        <h4>Últimas Participações Registradas</h4>
-        <div class="table-container">
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Data/Hora</th>
-                <th>Nome</th>
-                <th>RE</th>
-                <th>Área</th>
-                <th>Nota</th>
-                <th>%</th>
-              </tr>
-            </thead>
-            <tbody id="tabela-admin-corpo">
-              <tr><td colspan="6" style="text-align:center;">Carregando registros...</td></tr>
-            </tbody>
-          </table>
+        <div class="chart-container">
+          <h4>Classificação NPS (0 a 10)</h4>
+          <div class="chart-box-wrapper">
+            <canvas id="chartNps"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <h4>Mural de Sugestões, Barreiras e Elogios</h4>
+          <div id="mural-feedbacks" class="feedback-mural">
+            <div style="text-align:center; color:var(--color-text-muted); padding:20px;">Carregando feedbacks...</div>
+          </div>
         </div>
       </div>
     </section>
@@ -868,9 +1159,19 @@
     let respostasUsuario = {};
     let opcaoSelecionada = null;
 
+    // Respostas da Avaliação de Reação
+    let reacaoRespostas = {
+      q1: "",
+      q2: "",
+      q3: null,
+      q4: null
+    };
+
     // Instâncias dos gráficos
     let chartDesempenhoInstance = null;
     let chartQuestoesInstance = null;
+    let chartConhecimentoInstance = null;
+    let chartNpsInstance = null;
     let credenciaisSalvas = null;
 
     function iniciarQuiz() {
@@ -986,16 +1287,16 @@
         feedEl.textContent = "Importante redobrar a atenção aos procedimentos.";
       }
 
-      enviarDados(acertos);
+      enviarDadosQuiz(acertos);
     }
 
-    async function enviarDados(acertos) {
+    async function enviarDadosQuiz(acertos) {
       const statusEl = document.getElementById("sync-status");
-
       statusEl.className = "sync-status";
       statusEl.textContent = "Gravando sua participação...";
 
       const formData = new URLSearchParams();
+      formData.append("tipo", "quiz");
       formData.append("nome", usuario.nome);
       formData.append("matricula", usuario.matricula);
       formData.append("unidade", usuario.unidade);
@@ -1010,12 +1311,9 @@
         await fetch(GOOGLE_SCRIPT_URL, {
           method: "POST",
           mode: "no-cors",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: formData.toString()
         });
-
         statusEl.className = "sync-status ok";
         statusEl.textContent = "✅ Participação registrada com sucesso!";
       } catch (err) {
@@ -1025,16 +1323,104 @@
       }
     }
 
+    // ==========================================
+    // LÓGICA DA AVALIAÇÃO DE REAÇÃO
+    // ==========================================
+    function abrirAvaliacaoReacao() {
+      document.getElementById("screen-result").classList.remove("active");
+      document.getElementById("screen-reacao").classList.add("active");
+      window.scrollTo(0, 0);
+    }
+
+    function selOpcaoReacao(nomeCampo, elemento, valor) {
+      const container = elemento.parentElement;
+      container.querySelectorAll(".option-card").forEach(c => c.classList.remove("selected"));
+      elemento.classList.add("selected");
+      if (nomeCampo === "r_q1") reacaoRespostas.q1 = valor;
+      if (nomeCampo === "r_q2") reacaoRespostas.q2 = valor;
+    }
+
+    function selEscala(campo, elemento, valor) {
+      const row = elemento.parentElement;
+      row.querySelectorAll(".scale-btn").forEach(b => b.classList.remove("selected"));
+      elemento.classList.add("selected");
+      if (campo === "r_q3") reacaoRespostas.q3 = valor;
+      if (campo === "r_q4") reacaoRespostas.q4 = valor;
+    }
+
+    async function enviarReacao() {
+      if (!reacaoRespostas.q1) {
+        alert("Por favor, responda à Questão 1.");
+        return;
+      }
+      if (!reacaoRespostas.q2) {
+        alert("Por favor, responda à Questão 2.");
+        return;
+      }
+      if (reacaoRespostas.q3 === null) {
+        alert("Por favor, selecione sua nota de 1 a 5 na Questão 3.");
+        return;
+      }
+      if (reacaoRespostas.q4 === null) {
+        alert("Por favor, selecione sua nota de 0 a 10 na Questão 4.");
+        return;
+      }
+
+      const btn = document.getElementById("btn-env-reacao");
+      btn.disabled = true;
+      btn.textContent = "Gravando feedback...";
+
+      const formData = new URLSearchParams();
+      formData.append("tipo", "reacao");
+      formData.append("nome", usuario.nome);
+      formData.append("matricula", usuario.matricula);
+      formData.append("unidade", usuario.unidade);
+      formData.append("q1", reacaoRespostas.q1);
+      formData.append("q2", reacaoRespostas.q2);
+      formData.append("q3", reacaoRespostas.q3);
+      formData.append("q4", reacaoRespostas.q4);
+      formData.append("q5", document.getElementById("r_q5").value.trim() || "-");
+      formData.append("q6", document.getElementById("r_q6").value.trim() || "-");
+      formData.append("q7", document.getElementById("r_q7").value.trim() || "-");
+      formData.append("q8", document.getElementById("r_q8").value.trim() || "-");
+      formData.append("q9", document.getElementById("r_q9").value.trim() || "-");
+
+      try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: formData.toString()
+        });
+      } catch (err) {
+        console.error("Erro no envio:", err);
+      }
+
+      document.getElementById("screen-reacao").classList.remove("active");
+      document.getElementById("screen-thanks").classList.add("active");
+      window.scrollTo(0, 0);
+    }
+
     function reiniciar() {
       document.getElementById("nome").value = "";
       document.getElementById("matricula").value = "";
       document.getElementById("unidade").value = "";
-      document.getElementById("screen-result").classList.remove("active");
+      
+      // Limpa formulário de reação
+      reacaoRespostas = { q1: "", q2: "", q3: null, q4: null };
+      document.querySelectorAll(".r-opt, .scale-btn").forEach(el => el.classList.remove("selected"));
+      ["r_q5", "r_q6", "r_q7", "r_q8", "r_q9"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+      });
+
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
       document.getElementById("screen-intro").classList.add("active");
+      window.scrollTo(0, 0);
     }
 
     // ==========================================
-    // LÓGICA DO PAINEL DE ADMINISTRAÇÃO & GRÁFICOS
+    // LÓGICA DO PAINEL DE ADMINISTRAÇÃO & ABAS
     // ==========================================
     function abrirModalAdmin() {
       document.getElementById("admin-user").value = "";
@@ -1060,34 +1446,44 @@
       }
     }
 
+    function trocarAbaAdmin(aba) {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".admin-sub-tab").forEach(t => t.classList.remove("active"));
+
+      if (aba === "quiz") {
+        document.getElementById("tab-btn-quiz").classList.add("active");
+        document.getElementById("subtab-quiz").classList.add("active");
+      } else {
+        document.getElementById("tab-btn-reacao").classList.add("active");
+        document.getElementById("subtab-reacao").classList.add("active");
+      }
+    }
+
     async function carregarDashboardAdmin(user, pass) {
-      // Oculta telas do usuário e exibe tela admin com container expandido
       document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
       document.getElementById("progress-wrapper").style.display = "none";
       document.getElementById("app-container").classList.add("admin-expanded");
       document.getElementById("screen-admin").classList.add("active");
-
-      const tbody = document.getElementById("tabela-admin-corpo");
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Carregando dados da SIPAT...</td></tr>`;
 
       try {
         const resp = await fetch(`${GOOGLE_SCRIPT_URL}?user=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}`);
         const json = await resp.json();
 
         if (json.status !== "success") {
-          alert("Acesso negado: Usuário ou senha incorretos.");
+          alert("Acesso negado: Credenciais incorretas.");
           sairAdmin();
           return;
         }
 
-        renderizarMetricasECharts(json.data || []);
+        renderizarMetricasQuiz(json.quiz || []);
+        renderizarMetricasReacao(json.reacao || []);
       } catch (err) {
         console.error("Erro ao carregar dados admin:", err);
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--color-danger);">Erro de conexão ao carregar registros.</td></tr>`;
+        alert("Falha na conexão com a central de dados.");
       }
     }
 
-    function renderizarMetricasECharts(dados) {
+    function renderizarMetricasQuiz(dados) {
       const total = dados.length;
       document.getElementById("kpi-total").textContent = total;
 
@@ -1095,39 +1491,31 @@
         document.getElementById("kpi-media").textContent = "0.0";
         document.getElementById("kpi-aprov").textContent = "0%";
         document.getElementById("kpi-critico").textContent = "Nenhum";
-        document.getElementById("tabela-admin-corpo").innerHTML = `<tr><td colspan="6" style="text-align:center;">Nenhum registro encontrado até o momento.</td></tr>`;
+        document.getElementById("tabela-admin-corpo").innerHTML = `<tr><td colspan="6" style="text-align:center;">Nenhum registro encontrado.</td></tr>`;
         return;
       }
 
       let somaNotas = 0;
       let aprovados = 0;
-      let contagemExcelente = 0; // 10 a 12
-      let contagemBom = 0;       // 7 a 9
-      let contagemAtencao = 0;   // 0 a 6
-
-      // Contagem de acertos por questão (Q1 a Q12)
+      let contagemExcelente = 0;
+      let contagemBom = 0;
+      let contagemAtencao = 0;
       const acertosPorQuestao = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-      // Monta tabela (reversa: mais recentes primeiro)
       const tbody = document.getElementById("tabela-admin-corpo");
       tbody.innerHTML = "";
 
       dados.slice().reverse().forEach(row => {
         const nota = row.acertos;
         somaNotas += nota;
-
-        if (nota >= 8.4) aprovados++; // Aprovação 70%
+        if (nota >= 8.4) aprovados++;
 
         if (nota >= 10) contagemExcelente++;
         else if (nota >= 7) contagemBom++;
         else contagemAtencao++;
 
-        // Checagem de acertos por questão
         questoes.forEach((q, idx) => {
-          const resp = row[`q${q.id}`];
-          if (resp === q.correta) {
-            acertosPorQuestao[idx]++;
-          }
+          if (row[`q${q.id}`] === q.correta) acertosPorQuestao[idx]++;
         });
 
         const tr = document.createElement("tr");
@@ -1142,13 +1530,9 @@
         tbody.appendChild(tr);
       });
 
-      const media = (somaNotas / total).toFixed(1);
-      const taxaAprov = Math.round((aprovados / total) * 100);
+      document.getElementById("kpi-media").textContent = (somaNotas / total).toFixed(1);
+      document.getElementById("kpi-aprov").textContent = `${Math.round((aprovados / total) * 100)}%`;
 
-      document.getElementById("kpi-media").textContent = media;
-      document.getElementById("kpi-aprov").textContent = `${taxaAprov}%`;
-
-      // Identifica a questão mais errada
       let menorIndice = 0;
       let menorAcertos = acertosPorQuestao[0];
       for (let i = 1; i < 12; i++) {
@@ -1157,10 +1541,10 @@
           menorIndice = i;
         }
       }
-      const percErro = total > 0 ? Math.round(((total - menorAcertos) / total) * 100) : 0;
+      const percErro = Math.round(((total - menorAcertos) / total) * 100);
       document.getElementById("kpi-critico").textContent = `Q${menorIndice + 1} (${percErro}% de erro)`;
 
-      // Gráfico 1: Desempenho (Doughnut)
+      // Gráfico Desempenho
       const ctxDesemp = document.getElementById("chartDesempenho").getContext("2d");
       if (chartDesempenhoInstance) chartDesempenhoInstance.destroy();
       chartDesempenhoInstance = new Chart(ctxDesemp, {
@@ -1176,19 +1560,14 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: "bottom",
-              labels: { color: "#9BB0C1", boxWidth: 12, font: { size: 11 } }
-            }
-          }
+          plugins: { legend: { position: "bottom", labels: { color: "#9BB0C1", font: { size: 11 } } } }
         }
       });
 
-      // Gráfico 2: Taxa de Acertos por Questão (Barra)
+      // Gráfico Questões
       const ctxQuestoes = document.getElementById("chartQuestoes").getContext("2d");
       if (chartQuestoesInstance) chartQuestoesInstance.destroy();
-      const percQuestoes = acertosPorQuestao.map(qtd => total > 0 ? Math.round((qtd / total) * 100) : 0);
+      const percQuestoes = acertosPorQuestao.map(qtd => Math.round((qtd / total) * 100));
 
       chartQuestoesInstance = new Chart(ctxQuestoes, {
         type: "bar",
@@ -1205,20 +1584,136 @@
           responsive: true,
           maintainAspectRatio: false,
           scales: {
-            y: {
-              beginAtZero: true,
-              max: 100,
-              ticks: { color: "#9BB0C1", font: { size: 10 } },
-              grid: { color: "rgba(255,255,255,0.05)" }
-            },
-            x: {
-              ticks: { color: "#9BB0C1", font: { size: 10 } },
-              grid: { display: false }
-            }
+            y: { beginAtZero: true, max: 100, ticks: { color: "#9BB0C1" }, grid: { color: "rgba(255,255,255,0.05)" } },
+            x: { ticks: { color: "#9BB0C1" }, grid: { display: false } }
           },
-          plugins: {
-            legend: { display: false }
-          }
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    function renderizarMetricasReacao(dados) {
+      const total = dados.length;
+      document.getElementById("kpi-r-total").textContent = total;
+
+      if (total === 0) {
+        document.getElementById("kpi-r-nps").textContent = "0";
+        document.getElementById("kpi-r-preparo").textContent = "0.0/5";
+        document.getElementById("kpi-r-adesao").textContent = "0%";
+        document.getElementById("mural-feedbacks").innerHTML = `<div style="text-align:center; color:var(--color-text-muted); padding:20px;">Nenhuma avaliação de reação recebida até o momento.</div>`;
+        return;
+      }
+
+      let promotores = 0;
+      let neutros = 0;
+      let detratores = 0;
+      let somaPreparo = 0;
+      let intencaoSim = 0;
+
+      const contagemConhecimento = {
+        "Concordo totalmente": 0,
+        "Concordo parcialmente": 0,
+        "Neutro": 0,
+        "Discordo parcialmente": 0,
+        "Discordo totalmente": 0
+      };
+
+      const mural = document.getElementById("mural-feedbacks");
+      mural.innerHTML = "";
+
+      dados.slice().reverse().forEach(r => {
+        // NPS
+        const npsVal = Number(r.q4_nps);
+        if (npsVal >= 9) promotores++;
+        else if (npsVal >= 7) neutros++;
+        else detratores++;
+
+        // Preparo (1 a 5)
+        somaPreparo += Number(r.q3_preparado) || 0;
+
+        // Intenção prática
+        if (r.q2_intencao === "Sim") intencaoSim++;
+
+        // Conhecimento
+        if (contagemConhecimento[r.q1_conhecimento] !== undefined) {
+          contagemConhecimento[r.q1_conhecimento]++;
+        }
+
+        // Mural de Feedbacks
+        const temTexto = (r.q5_falta && r.q5_falta !== "-") || 
+                         (r.q6_impacto && r.q6_impacto !== "-") || 
+                         (r.q7_barreiras && r.q7_barreiras !== "-") || 
+                         (r.q8_dicas && r.q8_dicas !== "-") || 
+                         (r.q9_elogios && r.q9_elogios !== "-");
+
+        if (temTexto) {
+          const card = document.createElement("div");
+          card.className = "feedback-card";
+          card.innerHTML = `
+            <div class="meta">${r.nome} (${r.unidade || "Geral"}) • NPS: ${r.q4_nps}/10 • Preparo: ${r.q3_preparado}/5</div>
+            ${r.q9_elogios && r.q9_elogios !== "-" ? `<div class="feedback-item"><strong>Elogio / Pontos Fortes:</strong> ${r.q9_elogios}</div>` : ""}
+            ${r.q6_impacto && r.q6_impacto !== "-" ? `<div class="feedback-item"><strong>Impacto Imediato:</strong> ${r.q6_impacto}</div>` : ""}
+            ${r.q7_barreiras && r.q7_barreiras !== "-" ? `<div class="feedback-item"><strong>Barreiras Apontadas:</strong> ${r.q7_barreiras}</div>` : ""}
+            ${r.q8_dicas && r.q8_dicas !== "-" ? `<div class="feedback-item"><strong>Dicas & Sugestões:</strong> ${r.q8_dicas}</div>` : ""}
+            ${r.q5_falta && r.q5_falta !== "-" ? `<div class="feedback-item"><strong>Sentiu Falta:</strong> ${r.q5_falta}</div>` : ""}
+          `;
+          mural.appendChild(card);
+        }
+      });
+
+      const npsScore = Math.round(((promotores - detratores) / total) * 100);
+      document.getElementById("kpi-r-nps").textContent = npsScore;
+      document.getElementById("kpi-r-preparo").textContent = (somaPreparo / total).toFixed(1) + "/5";
+      document.getElementById("kpi-r-adesao").textContent = `${Math.round((intencaoSim / total) * 100)}%`;
+
+      // Gráfico Conhecimento (Barra Horizontal)
+      const ctxConh = document.getElementById("chartConhecimento").getContext("2d");
+      if (chartConhecimentoInstance) chartConhecimentoInstance.destroy();
+      chartConhecimentoInstance = new Chart(ctxConh, {
+        type: "bar",
+        data: {
+          labels: ["Totalmente", "Parcialmente", "Neutro", "Discordo Parcial", "Discordo Total"],
+          datasets: [{
+            data: [
+              contagemConhecimento["Concordo totalmente"],
+              contagemConhecimento["Concordo parcialmente"],
+              contagemConhecimento["Neutro"],
+              contagemConhecimento["Discordo parcialmente"],
+              contagemConhecimento["Discordo totalmente"]
+            ],
+            backgroundColor: ["#00A859", "#2ecc71", "#f1c40f", "#e67e22", "#e74c3c"],
+            borderRadius: 4
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { beginAtZero: true, ticks: { color: "#9BB0C1" }, grid: { color: "rgba(255,255,255,0.05)" } },
+            y: { ticks: { color: "#9BB0C1" }, grid: { display: false } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+
+      // Gráfico NPS (Doughnut)
+      const ctxNps = document.getElementById("chartNps").getContext("2d");
+      if (chartNpsInstance) chartNpsInstance.destroy();
+      chartNpsInstance = new Chart(ctxNps, {
+        type: "doughnut",
+        data: {
+          labels: [`Promotores (9-10): ${promotores}`, `Neutros (7-8): ${neutros}`, `Detratores (0-6): ${detratores}`],
+          datasets: [{
+            data: [promotores, neutros, detratores],
+            backgroundColor: ["#00A859", "#F5A623", "#e74c3c"],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: "bottom", labels: { color: "#9BB0C1", font: { size: 11 } } } }
         }
       });
     }
