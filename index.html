@@ -4,1046 +4,868 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Workshop Direção Preventiva | SIPAT Necta</title>
-  
-  <!-- Tailwind CSS & Google Fonts -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Confetti library for celebration -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-  <!-- Tailwind Configuration for Necta & Workshop Palette -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            necta: {
-              gold: '#F5A623',
-              amber: '#E67E22',
-              green: '#00A859',
-              darkgreen: '#007A3E',
-              dark: '#111827',
-              surface: '#1F2937',
-              lightcard: '#FFFFFF'
-            }
-          },
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            heading: ['Montserrat', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
-
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
+    :root {
+      --color-bg: #0d1217;
+      --color-surface: #17212b;
+      --color-surface-card: #202d3b;
+      --color-gold: #F5A623;
+      --color-gold-hover: #e0961b;
+      --color-green: #00A859;
+      --color-green-dark: #005A36;
+      --color-text: #FFFFFF;
+      --color-text-muted: #9BB0C1;
+      --color-border: #2c3e50;
+      --color-danger: #e74c3c;
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
-      background-color: #0d1117;
-      color: #f3f4f6;
     }
-    h1, h2, h3, h4, .font-heading {
-      font-family: 'Montserrat', sans-serif;
+
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 12px;
     }
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
+
+    #app-container {
+      width: 100%;
+      max-width: 480px;
+      background-color: var(--color-surface);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--color-border);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 90vh;
     }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 999px;
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, #0e1720 0%, #15222e 100%);
+      padding: 18px 16px;
+      text-align: center;
+      border-bottom: 2px solid var(--color-border);
+      position: relative;
     }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: rgba(245, 166, 35, 0.35);
-      border-radius: 999px;
+
+    .banner-badge {
+      background: var(--color-gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.82rem;
+      letter-spacing: 1px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
     }
-    .glass-card {
-      background: rgba(31, 41, 55, 0.88);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+
+    .necta-tag {
+      color: var(--color-green-dark);
+      font-weight: 900;
     }
+
+    header h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .btn-settings {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      background: transparent;
+      border: none;
+      color: var(--color-text-muted);
+      font-size: 1.3rem;
+      cursor: pointer;
+      padding: 6px;
+    }
+
+    /* PROGRESS BAR */
+    .progress-wrapper {
+      background: #111a22;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--color-border);
+      display: none;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .progress-bar-bg {
+      height: 8px;
+      background: #243447;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--color-green), var(--color-gold));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* CONTENT BODY */
+    .screen {
+      padding: 20px 16px;
+      display: none;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* TELA INICIAL */
+    .intro-hero {
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.3);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .intro-hero h2 {
+      color: var(--color-gold);
+      font-size: 1.15rem;
+      margin-bottom: 6px;
+    }
+
+    .intro-hero p {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      line-height: 1.4;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #e4eaf0;
+    }
+
+    .input-control {
+      width: 100%;
+      background: var(--color-surface-card);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 13px 14px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-control:focus {
+      border-color: var(--color-gold);
+    }
+
+    /* BOTÕES */
+    .btn {
+      width: 100%;
+      background: var(--color-gold);
+      color: #000;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s, transform 0.1s;
+      margin-top: auto;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+      background: var(--color-gold-hover);
+    }
+
+    .btn:disabled {
+      background: #445466;
+      color: #8899a6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      margin-top: 10px;
+    }
+
+    /* CARDS DE QUESTÕES */
+    .block-tag {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--color-gold);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .question-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.45;
+      margin-bottom: 18px;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
     .option-card {
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      background: var(--color-surface-card);
+      border: 1.5px solid var(--color-border);
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 0.92rem;
+      line-height: 1.35;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
     }
+
     .option-card:active {
-      transform: scale(0.985);
+      transform: scale(0.99);
     }
-    @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 15px rgba(245, 166, 35, 0.25); }
-      50% { box-shadow: 0 0 25px rgba(245, 166, 35, 0.5); }
+
+    .option-card.selected {
+      border-color: var(--color-gold);
+      background: rgba(245, 166, 35, 0.12);
     }
-    .glow-gold {
-      animation: pulseGlow 3s infinite;
+
+    .option-indicator {
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+    .option-card.selected .option-indicator {
+      border-color: var(--color-gold);
+      background: var(--color-gold);
+      color: #000;
+    }
+
+    /* RESULTADO & DEBRIEFING */
+    .result-score-box {
+      text-align: center;
+      padding: 20px 10px;
+      background: linear-gradient(180deg, rgba(0, 168, 89, 0.15) 0%, rgba(23, 33, 43, 0) 100%);
+      border-radius: var(--radius);
+      margin-bottom: 18px;
+      border: 1px solid rgba(0, 168, 89, 0.3);
+    }
+
+    .score-circle {
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      background: var(--color-green);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+      font-size: 1.7rem;
+      font-weight: 800;
+      box-shadow: 0 0 20px rgba(0, 168, 89, 0.4);
+    }
+
+    .sync-status {
+      font-size: 0.82rem;
+      margin: 10px 0;
+      text-align: center;
+      color: var(--color-text-muted);
+      min-height: 20px;
+    }
+
+    .sync-status.ok {
+      color: #2ecc71;
+      font-weight: 600;
+    }
+
+    .sync-status.warn {
+      color: #f39c12;
+    }
+
+    .debrief-accordion-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 15px 0 10px;
+      color: var(--color-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .debrief-list {
+      max-height: 280px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-right: 4px;
+      margin-bottom: 16px;
+    }
+
+    .debrief-card {
+      background: var(--color-surface-card);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.82rem;
+      border-left: 4px solid var(--color-green);
+    }
+
+    .debrief-card.errou {
+      border-left-color: var(--color-danger);
+    }
+
+    .debrief-card h4 {
+      font-size: 0.86rem;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+
+    .debrief-card p {
+      color: var(--color-text-muted);
+      line-height: 1.35;
+    }
+
+    /* MODAL DE CONFIGURAÇÃO */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+    }
+
+    .modal-box h3 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-white">
+<body>
 
-  <header class="sticky top-0 z-40 bg-gray-900/95 border-b border-gray-800 shadow-md backdrop-blur-md">
-    <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center space-x-2.5">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-400 flex items-center justify-center text-gray-950 font-black shadow-lg shadow-amber-500/30">
-          <i class="fa-solid fa-car-shield text-lg"></i>
-        </div>
-        <div>
-          <div class="flex items-center space-x-1.5 leading-none">
-            <span class="font-extrabold text-sm tracking-wider text-white uppercase font-heading">SIPAT</span>
-            <span class="text-xs px-1.5 py-0.5 rounded font-bold bg-emerald-600 text-white">NECTA</span>
-          </div>
-          <p class="text-[11px] text-gray-400 font-medium">Workshop Direção Preventiva</p>
-        </div>
+  <div id="app-container">
+    <!-- CABEÇALHO -->
+    <header>
+      <div class="banner-badge">
+        <span>SIPAT</span>
+        <span class="necta-tag">NECTA</span>
       </div>
+      <h1>Workshop Direção Preventiva</h1>
+      <button class="btn-settings" onclick="abrirModalConfig()" title="Configurações">⚙️</button>
+    </header>
 
-      <!-- Config button for instructor -->
-      <button onclick="openConfigModal()" title="Configurar Google Sheets" class="p-2.5 text-gray-300 hover:text-amber-400 hover:bg-gray-800/80 rounded-xl border border-gray-700/60 transition-colors">
-        <i class="fa-solid fa-cloud-arrow-up text-sm"></i>
-      </button>
-    </div>
-  </header>
-
-  <main class="flex-1 max-w-md w-full mx-auto p-4 flex flex-col justify-center">
-
-    <!-- SCREEN 1: WELCOME & PARTICIPANT REGISTRATION -->
-    <section id="screen-welcome" class="space-y-5 animate-fade">
-      <!-- Visual Banner mimicking the provided cover slide -->
-      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-black border border-gray-700 shadow-2xl p-6 text-center">
-        <div class="absolute -top-16 -right-16 w-36 h-36 bg-amber-500/15 rounded-full blur-2xl pointer-events-none"></div>
-        <div class="absolute -bottom-16 -left-16 w-36 h-36 bg-emerald-500/15 rounded-full blur-2xl pointer-events-none"></div>
-
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30 mb-3">
-          <i class="fa-solid fa-shield-halved mr-1.5"></i> Mini-Game Interativo
-        </span>
-
-        <h1 class="text-2xl font-black text-white tracking-tight uppercase font-heading">
-          WORKSHOP <br>
-          <span class="bg-gradient-to-r from-amber-400 to-yellow-200 bg-clip-text text-transparent">DIREÇÃO PREVENTIVA</span>
-        </h1>
-
-        <div class="mt-4 pt-3 border-t border-gray-700/70 flex items-center justify-center space-x-2">
-          <span class="text-sm font-bold tracking-widest text-gray-300 font-heading">SIPAT</span>
-          <span class="text-sm font-black text-emerald-400 flex items-center">
-            <svg class="w-4 h-4 mr-1 inline" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2L2 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 18c-3.75-1.11-7-5.07-7-9.5V8.3l7-3.5 7 3.5V10.5c0 4.43-3.25 8.39-7 9.5z"/>
-            </svg>
-            NECTA
-          </span>
-        </div>
+    <!-- BARRA DE PROGRESSO -->
+    <div id="progress-wrapper" class="progress-wrapper">
+      <div class="progress-meta">
+        <span id="label-questao">Questão 1 de 12</span>
+        <span id="label-porcentagem">0%</span>
       </div>
-
-      <!-- Registration Card -->
-      <div class="glass-card rounded-2xl p-5 shadow-xl">
-        <h2 class="text-base font-bold text-white mb-1 flex items-center">
-          <i class="fa-regular fa-id-card text-amber-400 mr-2"></i> Identificação do Condutor
-        </h2>
-        <p class="text-xs text-gray-400 mb-4">Insira seus dados para registrar sua participação e sincronizar seu score.</p>
-
-        <form id="participant-form" onsubmit="handleStartQuiz(event)" class="space-y-3.5">
-          <div>
-            <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Nome Completo *</label>
-            <div class="relative">
-              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                <i class="fa-solid fa-user text-xs"></i>
-              </span>
-              <input type="text" id="user-name" required placeholder="Ex: Roberto Silva"
-                class="w-full bg-gray-900 border border-gray-700 rounded-xl pl-9 pr-3 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Matrícula ou RE *</label>
-            <div class="relative">
-              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                <i class="fa-solid fa-hashtag text-xs"></i>
-              </span>
-              <input type="text" id="user-id" required placeholder="Ex: 88412"
-                class="w-full bg-gray-900 border border-gray-700 rounded-xl pl-9 pr-3 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Unidade / Polo / Área</label>
-            <div class="relative">
-              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                <i class="fa-solid fa-location-dot text-xs"></i>
-              </span>
-              <input type="text" id="user-unit" placeholder="Ex: Operações / Araraquara"
-                class="w-full bg-gray-900 border border-gray-700 rounded-xl pl-9 pr-3 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
-            </div>
-          </div>
-
-          <!-- Sheet status pill indicator -->
-          <div id="connection-badge" class="pt-1 flex items-center justify-between text-xs text-gray-400">
-            <span class="flex items-center">
-              <span id="sheet-status-dot" class="w-2 h-2 rounded-full bg-emerald-400 mr-1.5"></span>
-              <span id="sheet-status-text">Planilha Google configurada</span>
-            </span>
-            <button type="button" onclick="openConfigModal()" class="text-amber-400 hover:underline text-[11px]">Alterar Link</button>
-          </div>
-
-          <button type="submit" class="w-full mt-2 py-3.5 px-4 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-gray-950 font-bold rounded-xl shadow-lg shadow-amber-500/25 flex items-center justify-center space-x-2 text-sm uppercase tracking-wide transition-all transform active:scale-95">
-            <span>Iniciar Quiz (12 Questões)</span>
-            <i class="fa-solid fa-arrow-right"></i>
-          </button>
-        </form>
-      </div>
-
-      <div class="grid grid-cols-2 gap-2 text-center text-xs text-gray-400">
-        <div class="bg-gray-800/50 p-2.5 rounded-xl border border-gray-700/50">
-          <i class="fa-solid fa-stopwatch text-amber-400 block text-base mb-1"></i>
-          <span>Tempo estimado: ~4 min</span>
-        </div>
-        <div class="bg-gray-800/50 p-2.5 rounded-xl border border-gray-700/50">
-          <i class="fa-solid fa-graduation-cap text-emerald-400 block text-base mb-1"></i>
-          <span>Debriefing oficial ao final</span>
-        </div>
-      </div>
-    </section>
-
-    <section id="screen-quiz" class="hidden space-y-4 animate-fade">
-      <!-- Progress Bar & Block Info -->
-      <div class="glass-card p-3 rounded-2xl border border-gray-800 space-y-2">
-        <div class="flex items-center justify-between text-xs">
-          <span id="block-tag" class="px-2.5 py-0.5 rounded-full font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-            BLOCO 1 | Antes de dirigir
-          </span>
-          <span class="font-bold text-gray-300">
-            <span id="current-question-num" class="text-amber-400 text-sm">1</span> / 12
-          </span>
-        </div>
-
-        <!-- Progress bar line -->
-        <div class="w-full bg-gray-800 h-2 rounded-full overflow-hidden">
-          <div id="progress-indicator" class="bg-gradient-to-r from-amber-500 to-emerald-400 h-full w-1/12 rounded-full transition-all duration-300 ease-out"></div>
-        </div>
-      </div>
-
-      <!-- Question Card -->
-      <div class="glass-card rounded-2xl p-5 border border-gray-700/80 shadow-2xl relative">
-        <div class="flex items-center space-x-2 text-xs font-semibold text-emerald-400 uppercase tracking-wide mb-2">
-          <i class="fa-solid fa-circle-question"></i>
-          <span id="question-type">Verdadeiro ou Falso</span>
-        </div>
-
-        <h3 id="question-text" class="text-base font-bold text-white leading-snug mb-5">
-          Pergunta será carregada aqui...
-        </h3>
-
-        <!-- Options Container -->
-        <div id="options-container" class="space-y-2.5">
-          <!-- Dynamically populated options -->
-        </div>
-      </div>
-
-      <!-- Navigation Controls -->
-      <div class="flex items-center justify-between pt-1">
-        <button id="btn-prev" onclick="prevQuestion()" class="py-2.5 px-4 rounded-xl border border-gray-700 bg-gray-800/80 text-gray-300 font-semibold text-xs flex items-center space-x-1.5 disabled:opacity-30 disabled:pointer-events-none hover:bg-gray-700 transition">
-          <i class="fa-solid fa-arrow-left"></i>
-          <span>Anterior</span>
-        </button>
-
-        <button id="btn-next" onclick="nextQuestion()" class="py-2.5 px-5 rounded-xl font-bold text-xs bg-amber-500 hover:bg-amber-400 text-gray-950 flex items-center space-x-1.5 shadow-lg shadow-amber-500/20 disabled:opacity-40 transition">
-          <span id="btn-next-label">Próxima</span>
-          <i class="fa-solid fa-arrow-right"></i>
-        </button>
-      </div>
-    </section>
-
-    <section id="screen-result" class="hidden space-y-4 animate-fade pb-10">
-      <!-- Score summary card -->
-      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-b from-gray-800 to-gray-900 border border-gray-700 p-6 text-center shadow-2xl">
-        <div class="w-20 h-20 mx-auto mb-3 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-400 flex items-center justify-center text-gray-950 font-black shadow-lg shadow-amber-500/40 text-3xl">
-          <i class="fa-solid fa-award"></i>
-        </div>
-
-        <h2 class="text-xl font-black text-white font-heading uppercase">Resultado Final</h2>
-        <p id="result-participant-name" class="text-xs text-gray-400 font-medium mt-0.5">Condutor(a)</p>
-
-        <!-- Dynamic Score Display -->
-        <div class="mt-4 flex items-baseline justify-center space-x-2">
-          <span id="final-score-points" class="text-4xl font-extrabold text-amber-400 font-heading">0</span>
-          <span class="text-gray-400 text-lg font-bold">/ 12 acertos</span>
-        </div>
-        <p id="score-percentage-tag" class="text-xs font-semibold text-emerald-400 mt-1">100% de aproveitamento</p>
-
-        <p id="score-feedback-phrase" class="text-xs text-gray-300 mt-3 px-2 leading-relaxed">
-          Excelente postura preventiva! Você demonstra alinhamento sólido com as práticas de segurança e procedimentos da Necta.
-        </p>
-
-        <!-- Google Sheet Transmission Status Card -->
-        <div id="sheet-sync-box" class="mt-5 p-3 rounded-xl bg-gray-900/90 border border-gray-700/80 text-left text-xs space-y-1.5">
-          <div class="flex items-center justify-between">
-            <span class="font-semibold text-gray-300 flex items-center">
-              <i id="sync-icon" class="fa-solid fa-circle-notch fa-spin text-amber-400 mr-2"></i>
-              <span id="sync-label">Sincronizando com a planilha...</span>
-            </span>
-            <span id="sync-badge" class="px-2 py-0.5 text-[10px] rounded bg-gray-800 text-gray-400 font-mono">Enviando</span>
-          </div>
-          <p id="sync-detail" class="text-[11px] text-gray-400">Registrando respostas, pontuação e data/hora no Google Sheets.</p>
-          <button id="btn-resync" onclick="syncDataToGoogleSheets()" class="hidden mt-2 text-[11px] text-amber-400 font-semibold underline hover:text-amber-300">
-            Tentar enviar novamente
-          </button>
-        </div>
-      </div>
-
-      <!-- Action buttons -->
-      <div class="flex space-x-2">
-        <button onclick="restartQuiz()" class="flex-1 py-3 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl text-xs font-bold text-gray-200 flex items-center justify-center space-x-1.5 transition">
-          <i class="fa-solid fa-rotate-left"></i>
-          <span>Novo Teste</span>
-        </button>
-        <button onclick="shareScore()" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-xl text-xs font-bold text-white flex items-center justify-center space-x-1.5 shadow-lg shadow-emerald-600/30 transition">
-          <i class="fa-solid fa-share-nodes"></i>
-          <span>Compartilhar</span>
-        </button>
-      </div>
-
-      <!-- Debriefing Accordion Header -->
-      <div class="pt-2">
-        <div class="flex items-center justify-between mb-2">
-          <h3 class="text-sm font-bold text-white flex items-center uppercase tracking-wide">
-            <i class="fa-solid fa-clipboard-check text-amber-400 mr-2"></i> Gabarito & Debriefing
-          </h3>
-          <span class="text-[11px] text-gray-400">12 Questões analisadas</span>
-        </div>
-
-        <!-- Debriefing List Container -->
-        <div id="debriefing-list" class="space-y-3">
-          <!-- Dynamically populated review cards -->
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <div id="config-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="glass-card rounded-2xl max-w-md w-full p-5 border border-gray-700 shadow-2xl max-h-[90vh] overflow-y-auto custom-scrollbar space-y-4">
-      <div class="flex items-center justify-between border-b border-gray-700/60 pb-3">
-        <div class="flex items-center space-x-2">
-          <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-            <i class="fa-solid fa-table"></i>
-          </div>
-          <h3 class="text-sm font-bold text-white uppercase font-heading">Conectar Planilha Google</h3>
-        </div>
-        <button onclick="closeConfigModal()" class="text-gray-400 hover:text-white text-base p-1">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <div class="text-xs text-gray-300 space-y-3">
-        <p>Insira a URL do seu <strong>Google Apps Script (Web App)</strong> para armazenar em tempo real as respostas dos participantes na sua planilha.</p>
-        
-        <div>
-          <label class="block font-semibold text-gray-200 mb-1">URL do Web App (Apps Script):</label>
-          <input type="url" id="cfg-sheet-url" placeholder="https://script.google.com/macros/s/AKfycbws_C40DFMpTIgAKU--JUq8wuCpHY3gXs-02_6uFUcD6VC9Dty-bxhzWllTmt7-ydMc/exec"
-            class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-amber-400">
-        </div>
-
-        <div class="flex space-x-2">
-          <button onclick="saveSheetUrl()" class="flex-1 py-2 px-3 bg-amber-500 hover:bg-amber-400 text-gray-950 font-bold rounded-lg text-xs transition">
-            Salvar Configuração
-          </button>
-          <button onclick="testConnection()" class="py-2 px-3 bg-gray-800 hover:bg-gray-700 border border-gray-600 text-gray-200 font-semibold rounded-lg text-xs transition">
-            Testar Conexão
-          </button>
-        </div>
-        <div id="test-result-msg" class="hidden text-[11px] p-2 rounded-lg"></div>
-
-        <!-- Instructions toggle -->
-        <div class="mt-4 pt-3 border-t border-gray-700/60">
-          <button type="button" onclick="toggleScriptGuide()" class="w-full flex items-center justify-between text-left text-xs font-semibold text-amber-400 hover:text-amber-300">
-            <span><i class="fa-solid fa-circle-question mr-1"></i> Como criar o Web App na Planilha (Passo a Passo)</span>
-            <i id="guide-chevron" class="fa-solid fa-chevron-down text-[10px]"></i>
-          </button>
-
-          <div id="script-guide" class="hidden mt-3 space-y-2 text-[11px] text-gray-300 bg-gray-900/90 p-3 rounded-xl border border-gray-700/60">
-            <ol class="list-decimal list-inside space-y-1.5">
-              <li>Crie uma nova <strong>Planilha no Google Drive</strong>.</li>
-              <li>No menu superior, vá em <strong>Extensões > Apps Script</strong>.</li>
-              <li>Apague o código padrão e cole o código abaixo:</li>
-            </ol>
-
-            <div class="relative mt-2">
-              <pre class="bg-black text-amber-300 p-2.5 rounded-lg text-[10px] font-mono overflow-x-auto max-h-48 custom-scrollbar select-all" id="appscript-code">function doPost(e) {
-  var lock = LockService.getScriptLock();
-  lock.tryLock(10000);
-  try {
-    var doc = SpreadsheetApp.getActiveSpreadsheet();
-    var sheet = doc.getSheetByName("Respostas") || doc.getActiveSheet();
-    
-    // Cria cabeçalho se a planilha estiver vazia
-    if (sheet.getLastRow() === 0) {
-      sheet.appendRow([
-        "Data/Hora", "Nome", "Matrícula/RE", "Unidade", 
-        "Acertos", "Total Questões", "Percentual (%)",
-        "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", 
-        "Q7", "Q8", "Q9", "Q10", "Q11", "Q12"
-      ]);
-    }
-    
-    var data = JSON.parse(e.postData.contents);
-    var row = [
-      new Date().toLocaleString("pt-BR"),
-      data.nome,
-      data.matricula,
-      data.unidade,
-      data.acertos,
-      data.total,
-      data.percentual + "%"
-    ];
-    
-    // Adiciona as 12 respostas
-    for (var i = 1; i <= 12; i++) {
-      row.push(data.respostas["q" + i] || "");
-    }
-    
-    sheet.appendRow(row);
-    return ContentService.createTextOutput(JSON.stringify({result: "success"})).setMimeType(ContentService.MimeType.JSON);
-  } catch(err) {
-    return ContentService.createTextOutput(JSON.stringify({result: "error", error: err.message})).setMimeType(ContentService.MimeType.JSON);
-  } finally {
-    lock.releaseLock();
-  }
-}</pre>
-              <button onclick="copyAppsScript()" class="absolute top-2 right-2 bg-gray-800 hover:bg-gray-700 text-gray-200 px-2 py-1 rounded text-[10px] border border-gray-600 font-sans">
-                <i class="fa-regular fa-copy mr-1"></i> Copiar
-              </button>
-            </div>
-
-            <ol start="4" class="list-decimal list-inside space-y-1.5 pt-2">
-              <li>Clique em <strong>Implantar > Nova implantação</strong>.</li>
-              <li>Tipo: selecione <strong>App da Web</strong>.</li>
-              <li>Acesso: selecione <strong>Qualquer pessoa</strong> (necessário para que os colaboradores no celular possam enviar sem login no script).</li>
-              <li>Clique em <strong>Implantar</strong>, autorize as permissões e copie a <strong>URL do App da Web</strong> no campo acima.</li>
-            </ol>
-          </div>
-        </div>
+      <div class="progress-bar-bg">
+        <div id="progress-fill" class="progress-bar-fill"></div>
       </div>
     </div>
+
+    <!-- TELA 1: CADASTRO -->
+    <section id="screen-intro" class="screen active">
+      <div class="intro-hero">
+        <h2>Mini-Game de Condução Segura</h2>
+        <p>Responda com atenção às 12 situações do trânsito e ajude a fortalecer a cultura preventiva da nossa frota.</p>
+      </div>
+
+      <div class="input-group">
+        <label for="nome">Nome Completo *</label>
+        <input type="text" id="nome" class="input-control" placeholder="Digite seu nome completo" required>
+      </div>
+
+      <div class="input-group">
+        <label for="matricula">Matrícula / RE *</label>
+        <input type="text" id="matricula" class="input-control" placeholder="Ex: 12345" required>
+      </div>
+
+      <div class="input-group">
+        <label for="unidade">Unidade / Polo / Área</label>
+        <input type="text" id="unidade" class="input-control" placeholder="Ex: Operação, Logística, Administrativo">
+      </div>
+
+      <button class="btn" onclick="iniciarQuiz()">Começar Desafio ➔</button>
+    </section>
+
+    <!-- TELA 2: QUIZ -->
+    <section id="screen-quiz" class="screen">
+      <div id="block-indicator" class="block-tag">BLOCO 1</div>
+      <div id="question-text" class="question-title">Carregando pergunta...</div>
+      
+      <div id="options-container" class="options-list"></div>
+
+      <button id="btn-next" class="btn" onclick="proximaQuestao()" disabled>Confirmar Resposta ➔</button>
+    </section>
+
+    <!-- TELA 3: RESULTADO & DEBRIEFING -->
+    <section id="screen-result" class="screen">
+      <div class="result-score-box">
+        <div id="score-circle" class="score-circle">0/12</div>
+        <h2 id="result-feedback">Mandou bem!</h2>
+        <p id="sync-status" class="sync-status">Sincronizando com a planilha...</p>
+      </div>
+
+      <div class="debrief-accordion-title">Debriefing Pedagógico</div>
+      <div id="debrief-container" class="debrief-list"></div>
+
+      <button class="btn" onclick="reiniciar()">Novo Participante</button>
+    </section>
   </div>
 
-  <!-- Notification Toast message -->
-  <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-gray-900 border border-gray-700 text-white px-4 py-2.5 rounded-xl shadow-2xl text-xs flex items-center space-x-2 transition-all opacity-0 pointer-events-none duration-300">
-    <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400"></i>
-    <span id="toast-message">Mensagem</span>
+  <!-- MODAL DE CONFIGURAÇÃO DA PLANILHA -->
+  <div id="modal-config" class="modal">
+    <div class="modal-box">
+      <h3>Configuração da Planilha</h3>
+      <p style="font-size:0.8rem; color:var(--color-text-muted); margin-bottom:12px;">
+        Cole a URL da sua implantação web do Google Apps Script (terminada em <code>/exec</code>):
+      </p>
+      <div class="input-group">
+        <input type="url" id="input-endpoint" class="input-control" placeholder="https://script.google.com/macros/s/AKfycbws_C40DFMpTIgAKU--JUq8wuCpHY3gXs-02_6uFUcD6VC9Dty-bxhzWllTmt7-ydMc/exec">
+      </div>
+      <button class="btn" onclick="salvarConfig()">Salvar e Fechar</button>
+      <button class="btn btn-secondary" onclick="fecharModalConfig()">Cancelar</button>
+    </div>
   </div>
 
   <script>
-    // Complete Quiz Questions Database directly from the PDF 'Quiz_Direcao_Preventiva_Necta_Intuitu_COM_GABARITO.pdf'
-    const QUIZ_QUESTIONS = [
+    // =========================================================================
+    // CONFIGURAÇÃO DA URL DO GOOGLE APPS SCRIPT
+    // Cole aqui sua URL padrão se preferir deixar fixa no GitHub
+    // =========================================================================
+    let GOOGLE_SCRIPT_URL = "SUA_URL_DO_APPS_SCRIPT_AQUI";
+
+    // 12 QUESTÕES OFICIAIS DO WORKSHOP NECTA
+    const questoes = [
       {
         id: 1,
         bloco: "BLOCO 1 | Antes de dirigir",
-        tipo: "Verdadeiro ou Falso",
+        tipo: "VF",
         pergunta: "Antes de iniciar o trajeto, a condição física e emocional do condutor também deve ser considerada como parte da segurança.",
         opcoes: [
-          { key: "Verdadeiro", label: "Verdadeiro" },
-          { key: "Falso", label: "Falso" }
+          { texto: "Verdadeiro", valor: "Verdadeiro" },
+          { texto: "Falso", valor: "Falso" }
         ],
-        gabarito: "Verdadeiro",
-        debriefing: "Cansaço, fome, estresse, dor, emoções intensas e uso de medicamentos podem afetar atenção, percepção e reação."
+        correta: "Verdadeiro",
+        debriefing: "Cansaço, fome, estresse, dor, emoções intensas e uso de medicamentos afetam diretamente a percepção, atenção e capacidade de reação."
       },
       {
         id: 2,
         bloco: "BLOCO 1 | Antes de dirigir",
-        tipo: "Múltipla Escolha",
+        tipo: "ME",
         pergunta: "Qual atitude está mais alinhada à condução preventiva antes de sair com o veículo?",
         opcoes: [
-          { key: "A", label: "A) Sair rapidamente para evitar atraso." },
-          { key: "B", label: "B) Fazer o checklist previsto e verificar se há alguma anormalidade." },
-          { key: "C", label: "C) Conferir apenas o nível de combustível." },
-          { key: "D", label: "D) Fazer o checklist somente se o veículo apresentar algum problema." }
+          { texto: "A) Sair rapidamente para evitar atraso.", valor: "A" },
+          { texto: "B) Fazer o checklist previsto e verificar se há alguma anormalidade.", valor: "B" },
+          { texto: "C) Conferir apenas o nível de combustível.", valor: "C" },
+          { texto: "D) Fazer o checklist somente se o veículo apresentar algum problema.", valor: "D" }
         ],
-        gabarito: "B",
-        debriefing: "O checklist existe para identificar preventivamente avarias ou condições que possam comprometer a segurança."
+        correta: "B",
+        debriefing: "O checklist existe para identificar preventivamente avarias ou falhas antes de colocar o veículo em circulação."
       },
       {
         id: 3,
         bloco: "BLOCO 1 | Antes de dirigir",
-        tipo: "Verdadeiro ou Falso",
+        tipo: "VF",
         pergunta: "Na Necta, o condutor deve cumprir uma pausa mínima de 15 minutos a cada 3 horas de condução contínua.",
         opcoes: [
-          { key: "Verdadeiro", label: "Verdadeiro" },
-          { key: "Falso", label: "Falso" }
+          { texto: "Verdadeiro", valor: "Verdadeiro" },
+          { texto: "Falso", valor: "Falso" }
         ],
-        gabarito: "Verdadeiro",
-        debriefing: "A pausa mínima está prevista no procedimento de utilização da frota."
+        correta: "Verdadeiro",
+        debriefing: "A pausa mínima está prevista no procedimento de utilização da frota para combater a fadiga e recuperar a atenção."
       },
       {
         id: 4,
         bloco: "BLOCO 2 | Velocidade e distância",
-        tipo: "Múltipla Escolha",
+        tipo: "ME",
         pergunta: "Se uma via permite velocidade de até 100 km/h, isso significa que 100 km/h será sempre a velocidade mais segura?",
         opcoes: [
-          { key: "A", label: "A) Sim, porque é a velocidade permitida." },
-          { key: "B", label: "B) Não. A velocidade segura também depende das condições da via, clima, trânsito, visibilidade e do próprio condutor." },
-          { key: "C", label: "C) Sim, desde que não exista radar." },
-          { key: "D", label: "D) Não, porque o ideal é sempre dirigir muito abaixo do limite." }
+          { texto: "A) Sim, porque é a velocidade permitida.", valor: "A" },
+          { texto: "B) Não. A velocidade segura também depende das condições da via, clima, trânsito, visibilidade e do próprio condutor.", valor: "B" },
+          { texto: "C) Sim, desde que não exista radar.", valor: "C" },
+          { texto: "D) Não, porque o ideal é sempre dirigir muito abaixo do limite.", valor: "D" }
         ],
-        gabarito: "B",
-        debriefing: "O limite regulamentar é um teto. A condução segura exige adequação ao contexto."
+        correta: "B",
+        debriefing: "O limite regulamentar é o teto máximo permitido. A velocidade preventiva exige adequação constante ao ambiente."
       },
       {
         id: 5,
         bloco: "BLOCO 2 | Velocidade e distância",
-        tipo: "Verdadeiro ou Falso",
+        tipo: "VF",
         pergunta: "Aumentar a velocidade reduz o tempo de viagem, mas também reduz o tempo disponível para perceber e reagir a um risco.",
         opcoes: [
-          { key: "Verdadeiro", label: "Verdadeiro" },
-          { key: "Falso", label: "Falso" }
+          { texto: "Verdadeiro", valor: "Verdadeiro" },
+          { texto: "Falso", valor: "Falso" }
         ],
-        gabarito: "Verdadeiro",
-        debriefing: "Esse é o ponto-chave da atividade velocidade x tempo: o ganho de minutos pode vir acompanhado de perda de margem para decidir."
+        correta: "Verdadeiro",
+        debriefing: "O ganho de poucos minutos aumenta exponencialmente a distância percorrida no tempo de reação e frenagem."
       },
       {
         id: 6,
         bloco: "BLOCO 2 | Velocidade e distância",
-        tipo: "Múltipla Escolha",
+        tipo: "ME",
         pergunta: "Por que manter distância segura do veículo à frente?",
         opcoes: [
-          { key: "A", label: "A) Para ter espaço para acelerar." },
-          { key: "B", label: "B) Para impedir que outro veículo entre na faixa." },
-          { key: "C", label: "C) Para ganhar tempo de percepção, reação e frenagem." },
-          { key: "D", label: "D) Apenas para evitar multa." }
+          { texto: "A) Para ter espaço para acelerar.", valor: "A" },
+          { texto: "B) Para impedir que outro veículo entre na faixa.", valor: "B" },
+          { texto: "C) Para ganhar tempo de percepção, reação e frenagem.", valor: "C" },
+          { texto: "D) Apenas para evitar multa.", valor: "D" }
         ],
-        gabarito: "C",
-        debriefing: "Distância segura não é espaço perdido: é tempo disponível para reagir."
+        correta: "C",
+        debriefing: "Distância segura não é espaço vago: é uma zona de amortecimento para enxergar e reagir a imprevistos."
       },
       {
         id: 7,
         bloco: "BLOCO 3 | Condução em rodovia",
-        tipo: "Múltipla Escolha",
+        tipo: "ME",
         pergunta: "Em uma rodovia, qual comportamento favorece uma condução preventiva?",
         opcoes: [
-          { key: "A", label: "A) Permanecer ao lado de caminhões para acompanhar o fluxo." },
-          { key: "B", label: "B) Manter distância, observar pontos cegos e antecipar mudanças de faixa." },
-          { key: "C", label: "C) Acelerar sempre que houver espaço." },
-          { key: "D", label: "D) Mudar de faixa sem sinalizar quando não houver veículo próximo." }
+          { texto: "A) Permanecer ao lado de caminhões para acompanhar o fluxo.", valor: "A" },
+          { texto: "B) Manter distância, observar pontos cegos e antecipar mudanças de faixa.", valor: "B" },
+          { texto: "C) Acelerar sempre que houver espaço.", valor: "C" },
+          { texto: "D) Mudar de faixa sem sinalizar quando não houver veículo próximo.", valor: "D" }
         ],
-        gabarito: "B",
-        debriefing: "O posicionamento deve preservar campo de visão, distância e possibilidade de reação."
+        correta: "B",
+        debriefing: "O posicionamento defensivo preserva campo de visão, minimiza pontos cegos e amplia alternativas de escape."
       },
       {
         id: 8,
         bloco: "BLOCO 3 | Condução em rodovia",
-        tipo: "Verdadeiro ou Falso",
+        tipo: "VF",
         pergunta: "Em chuva ou neblina, manter a mesma velocidade e a mesma distância de um dia seco é suficiente, desde que o condutor esteja atento.",
         opcoes: [
-          { key: "Verdadeiro", label: "Verdadeiro" },
-          { key: "Falso", label: "Falso" }
+          { texto: "Verdadeiro", valor: "Verdadeiro" },
+          { texto: "Falso", valor: "Falso" }
         ],
-        gabarito: "Falso",
-        debriefing: "Condições adversas exigem redução de velocidade, aumento da distância e manobras mais suaves."
+        correta: "Falso",
+        debriefing: "Com pista molhada ou neblina, a aderência e a visibilidade caem drasticamente, exigindo redução de velocidade e dobro de distância."
       },
       {
         id: 9,
         bloco: "BLOCO 3 | Condução em rodovia",
-        tipo: "Múltipla Escolha",
+        tipo: "ME",
         pergunta: "Ao perceber um obstáculo ou situação de risco em rodovia, qual é a melhor lógica de decisão?",
         opcoes: [
-          { key: "A", label: "A) Frear somente quando o risco estiver muito próximo." },
-          { key: "B", label: "B) Antecipar o risco, reduzir gradualmente a velocidade e avaliar espaço e rota de saída." },
-          { key: "C", label: "C) Acelerar para passar antes do obstáculo." },
-          { key: "D", label: "D) Mudar de faixa imediatamente, sem verificar os demais veículos." }
+          { texto: "A) Frear somente quando o risco estiver muito próximo.", valor: "A" },
+          { texto: "B) Antecipar o risco, reduzir gradualmente a velocidade e avaliar espaço e rota de saída.", valor: "B" },
+          { texto: "C) Acelerar para passar antes do obstáculo.", valor: "C" },
+          { texto: "D) Mudar de faixa imediatamente, sem verificar os demais veículos.", valor: "D" }
         ],
-        gabarito: "B",
-        debriefing: "Direção preventiva significa agir antes que o risco se torne uma emergência."
+        correta: "B",
+        debriefing: "Direção preventiva é agir com antecedência, evitando freadas bruscas que gerem colisões traseiras."
       },
       {
         id: 10,
         bloco: "BLOCO 4 | Política Necta e emergência",
-        tipo: "Múltipla Escolha",
+        tipo: "ME",
         pergunta: "O que a telemetria da frota pode registrar?",
         opcoes: [
-          { key: "A", label: "A) Apenas a localização do veículo." },
-          { key: "B", label: "B) Somente o consumo de combustível." },
-          { key: "C", label: "C) Excesso de velocidade, acelerações e frenagens bruscas, desvios de rota, localização e tempo de parada." },
-          { key: "D", label: "D) Apenas multas recebidas pelo condutor." }
+          { texto: "A) Apenas a localização do veículo.", valor: "A" },
+          { texto: "B) Somente o consumo de combustível.", valor: "B" },
+          { texto: "C) Excesso de velocidade, acelerações e frenagens bruscas, desvios de rota, localização e tempo de parada.", valor: "C" },
+          { texto: "D) Apenas multas recebidas pelo condutor.", valor: "D" }
         ],
-        gabarito: "C",
-        debriefing: "A telemetria é usada para gestão operacional, segurança e controle de riscos."
+        correta: "C",
+        debriefing: "A telemetria da frota monitora comportamentos operacionais e de condução para preservar a vida e os equipamentos."
       },
       {
         id: 11,
         bloco: "BLOCO 4 | Política Necta e emergência",
-        tipo: "Verdadeiro ou Falso",
+        tipo: "VF",
         pergunta: "O cartão RFID é pessoal e intransferível e ajuda a vincular a utilização do veículo e os registros da operação ao condutor.",
         opcoes: [
-          { key: "Verdadeiro", label: "Verdadeiro" },
-          { key: "Falso", label: "Falso" }
+          { texto: "Verdadeiro", valor: "Verdadeiro" },
+          { texto: "Falso", valor: "Falso" }
         ],
-        gabarito: "Verdadeiro",
-        debriefing: "O procedimento define o RFID como identificação individual do condutor e proíbe sua cessão a terceiros."
+        correta: "Verdadeiro",
+        debriefing: "O RFID é a identidade digital do motorista no veículo; compartilhá-lo viola os procedimentos internos de segurança."
       },
       {
         id: 12,
         bloco: "BLOCO 4 | Política Necta e emergência",
-        tipo: "Múltipla Escolha",
+        tipo: "ME",
         pergunta: "Em caso de acidente com veículo da frota, qual sequência representa melhor o procedimento da Necta?",
         opcoes: [
-          { key: "A", label: "A) Registrar fotos -> sair do local -> avisar depois." },
-          { key: "B", label: "B) Preservar a segurança -> verificar vítimas -> acionar autoridades -> comunicar a empresa -> registrar evidências." },
-          { key: "C", label: "C) Assumir a responsabilidade -> negociar com terceiros -> comunicar Facilities." },
-          { key: "D", label: "D) Mover imediatamente o veículo e os feridos, independentemente do cenário." }
+          { texto: "A) Registrar fotos -> sair do local -> avisar depois.", valor: "A" },
+          { texto: "B) Preservar a segurança -> verificar vítimas -> acionar autoridades -> comunicar a empresa -> registrar evidências.", valor: "B" },
+          { texto: "C) Assumir a responsabilidade -> negociar com terceiros -> comunicar Facilities.", valor: "C" },
+          { texto: "D) Mover imediatamente o veículo e os feridos, independentemente do cenário.", valor: "D" }
         ],
-        gabarito: "B",
-        debriefing: "A sequência prioriza proteção das pessoas, atendimento, autoridades, comunicação interna e registro das evidências."
+        correta: "B",
+        debriefing: "A prioridade inegociável é sempre salvar vidas, garantir o atendimento médico e cumprir os fluxos formais de segurança."
       }
     ];
 
-    // State object
-    let currentUser = {
-      name: "",
-      id: "",
-      unit: ""
+    // ESTADO DA APLICAÇÃO
+    let usuario = { nome: "", matricula: "", unidade: "" };
+    let indiceAtual = 0;
+    let respostasUsuario = {};
+    let opcaoSelecionada = null;
+
+    // INICIALIZAÇÃO
+    window.onload = () => {
+      const salvo = localStorage.getItem("necta_quiz_endpoint");
+      if (salvo) GOOGLE_SCRIPT_URL = salvo;
     };
-    let currentQuestionIndex = 0;
-    let userAnswers = {}; // { 1: "Verdadeiro", 2: "B", ... }
-    let defaultEndpoint = "https://script.google.com/macros/s/AKfycbz_necta_demo/exec";
-    let storedSheetUrl = localStorage.getItem("necta_sheets_url") || "";
 
-    window.addEventListener("DOMContentLoaded", () => {
-      updateSheetBadge();
-      const savedInput = document.getElementById("cfg-sheet-url");
-      if (savedInput && storedSheetUrl) {
-        savedInput.value = storedSheetUrl;
-      }
-    });
+    function iniciarQuiz() {
+      const nomeInput = document.getElementById("nome").value.trim();
+      const matInput = document.getElementById("matricula").value.trim();
+      const unidInput = document.getElementById("unidade").value.trim();
 
-    function updateSheetBadge() {
-      const dot = document.getElementById("sheet-status-dot");
-      const text = document.getElementById("sheet-status-text");
-      if (storedSheetUrl && storedSheetUrl.startsWith("http")) {
-        dot.className = "w-2 h-2 rounded-full bg-emerald-400 mr-1.5";
-        text.textContent = "Google Sheets Conectado";
-      } else {
-        dot.className = "w-2 h-2 rounded-full bg-amber-400 mr-1.5";
-        text.textContent = "Modo Demonstração (Sem URL)";
-      }
-    }
-
-    function handleStartQuiz(e) {
-      e.preventDefault();
-      currentUser.name = document.getElementById("user-name").value.trim();
-      currentUser.id = document.getElementById("user-id").value.trim();
-      currentUser.unit = document.getElementById("user-unit").value.trim() || "Geral";
-
-      if (!currentUser.name || !currentUser.id) {
-        showToast("Por favor, preencha os campos obrigatórios.", "fa-triangle-exclamation");
+      if (!nomeInput || !matInput) {
+        alert("Por favor, preencha Nome e Matrícula/RE antes de continuar.");
         return;
       }
 
-      currentQuestionIndex = 0;
-      userAnswers = {};
+      usuario = {
+        nome: nomeInput,
+        matricula: matInput,
+        unidade: unidInput || "Geral"
+      };
 
-      document.getElementById("screen-welcome").classList.add("hidden");
-      document.getElementById("screen-quiz").classList.remove("hidden");
-      document.getElementById("screen-result").classList.add("hidden");
+      indiceAtual = 0;
+      respostasUsuario = {};
+      
+      document.getElementById("screen-intro").classList.remove("active");
+      document.getElementById("screen-quiz").classList.add("active");
+      document.getElementById("progress-wrapper").style.display = "block";
 
-      renderCurrentQuestion();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      carregarQuestao();
     }
 
-    function renderCurrentQuestion() {
-      const q = QUIZ_QUESTIONS[currentQuestionIndex];
-      const isLast = currentQuestionIndex === QUIZ_QUESTIONS.length - 1;
+    function carregarQuestao() {
+      const q = questoes[indiceAtual];
+      opcaoSelecionada = null;
+      document.getElementById("btn-next").disabled = true;
 
-      // Update question text and headers
-      document.getElementById("block-tag").textContent = q.bloco;
-      document.getElementById("current-question-num").textContent = q.id;
-      document.getElementById("question-type").textContent = q.tipo;
+      // Atualiza progresso
+      const perc = Math.round(((indiceAtual) / questoes.length) * 100);
+      document.getElementById("progress-fill").style.width = perc + "%";
+      document.getElementById("label-porcentagem").textContent = perc + "%";
+      document.getElementById("label-questao").textContent = `Questão ${indiceAtual + 1} de ${questoes.length}`;
+
+      // Textos
+      document.getElementById("block-indicator").textContent = q.bloco;
       document.getElementById("question-text").textContent = `${q.id}. ${q.pergunta}`;
 
-      // Progress bar percentage
-      const progressPercent = Math.round(((currentQuestionIndex + 1) / QUIZ_QUESTIONS.length) * 100);
-      document.getElementById("progress-indicator").style.width = `${progressPercent}%`;
-
-      // Next button text
-      const nextBtnLabel = document.getElementById("btn-next-label");
-      if (isLast) {
-        nextBtnLabel.textContent = "Finalizar";
-      } else {
-        nextBtnLabel.textContent = "Próxima";
-      }
-
-      // Prev button disabled on first
-      document.getElementById("btn-prev").disabled = currentQuestionIndex === 0;
-
-      // Render options
+      // Opções
       const container = document.getElementById("options-container");
       container.innerHTML = "";
 
-      const selectedValue = userAnswers[q.id];
-
-      q.opcoes.forEach(opt => {
-        const isSelected = selectedValue === opt.key;
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = `option-card w-full text-left p-3.5 rounded-xl border flex items-center justify-between text-xs font-medium transition-all ${
-          isSelected
-            ? "bg-amber-500/15 border-amber-400 text-amber-200 shadow-md ring-1 ring-amber-400/50"
-            : "bg-gray-900/80 border-gray-700/80 text-gray-200 hover:bg-gray-850 hover:border-gray-600"
-        }`;
-        
-        btn.innerHTML = `
-          <span class="pr-2 leading-relaxed">${opt.label}</span>
-          <span class="w-5 h-5 rounded-full border flex-shrink-0 flex items-center justify-center text-[10px] ${
-            isSelected ? "border-amber-400 bg-amber-400 text-gray-950 font-bold" : "border-gray-600 text-transparent"
-          }">
-            <i class="fa-solid fa-check"></i>
-          </span>
-        `;
-
-        btn.onclick = () => selectOption(q.id, opt.key);
-        container.appendChild(btn);
-      });
-
-      // Update next button active state
-      document.getElementById("btn-next").disabled = !userAnswers[q.id];
-    }
-
-    function selectOption(questionId, answerKey) {
-      userAnswers[questionId] = answerKey;
-      renderCurrentQuestion();
-    }
-
-    function prevQuestion() {
-      if (currentQuestionIndex > 0) {
-        currentQuestionIndex--;
-        renderCurrentQuestion();
-      }
-    }
-
-    function nextQuestion() {
-      const q = QUIZ_QUESTIONS[currentQuestionIndex];
-      if (!userAnswers[q.id]) {
-        showToast("Selecione uma resposta para continuar.", "fa-circle-info");
-        return;
-      }
-
-      if (currentQuestionIndex < QUIZ_QUESTIONS.length - 1) {
-        currentQuestionIndex++;
-        renderCurrentQuestion();
-      } else {
-        finishQuiz();
-      }
-    }
-
-    function finishQuiz() {
-      let correctCount = 0;
-      QUIZ_QUESTIONS.forEach(q => {
-        if (userAnswers[q.id] === q.gabarito) {
-          correctCount++;
-        }
-      });
-
-      const percentage = Math.round((correctCount / QUIZ_QUESTIONS.length) * 100);
-
-      // Hide quiz screen and show result
-      document.getElementById("screen-quiz").classList.add("hidden");
-      document.getElementById("screen-result").classList.remove("hidden");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-
-      // Update score display
-      document.getElementById("result-participant-name").textContent = `${currentUser.name} (RE: ${currentUser.id} - ${currentUser.unit})`;
-      document.getElementById("final-score-points").textContent = correctCount;
-      document.getElementById("score-percentage-tag").textContent = `${percentage}% de aproveitamento (${correctCount} de ${QUIZ_QUESTIONS.length})`;
-
-      // Dynamic feedback message
-      const feedbackEl = document.getElementById("score-feedback-phrase");
-      if (percentage >= 80) {
-        feedbackEl.textContent = "Excelente postura preventiva! Você demonstra alinhamento exemplar com a cultura de segurança e procedimentos operacionais da Necta.";
-        // Trigger celebratory confetti
-        if (typeof confetti === "function") {
-          confetti({
-            particleCount: 80,
-            spread: 60,
-            origin: { y: 0.6 }
-          });
-        }
-      } else if (percentage >= 60) {
-        feedbackEl.textContent = "Bom desempenho! Vale a pena revisar os debriefings abaixo para reforçar pontos vitais de telemetria, rodovia e pausas de descanso.";
-      } else {
-        feedbackEl.textContent = "Atenção necessária. Sugerimos estudar os procedimentos com cautela e debater as diretrizes de direção preventiva com sua liderança.";
-      }
-
-      // Render debriefing cards
-      renderDebriefingList();
-
-      // Trigger automatic sync with Google Sheets
-      syncDataToGoogleSheets();
-    }
-
-    function renderDebriefingList() {
-      const container = document.getElementById("debriefing-list");
-      container.innerHTML = "";
-
-      QUIZ_QUESTIONS.forEach(q => {
-        const userAnswer = userAnswers[q.id];
-        const isCorrect = userAnswer === q.gabarito;
-
-        // Label user answer text
-        let userDisplay = userAnswer || "Não respondida";
-        let correctDisplay = q.gabarito;
-
+      q.opcoes.forEach(op => {
         const card = document.createElement("div");
-        card.className = `p-4 rounded-xl border text-xs space-y-2 ${
-          isCorrect
-            ? "bg-emerald-950/20 border-emerald-800/60"
-            : "bg-red-950/20 border-red-800/60"
-        }`;
+        card.className = "option-card";
+        card.onclick = () => selecionarOpcao(card, op.valor);
 
         card.innerHTML = `
-          <div class="flex items-start justify-between">
-            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
-              isCorrect ? "bg-emerald-500/20 text-emerald-300" : "bg-red-500/20 text-red-300"
-            }">
-              Questão ${q.id} ${isCorrect ? "• Acertou" : "• Atenção"}
-            </span>
-            <span class="text-[11px] font-bold ${isCorrect ? "text-emerald-400" : "text-red-400"}">
-              ${isCorrect ? '<i class="fa-solid fa-circle-check mr-1"></i> Correta' : '<i class="fa-solid fa-triangle-exclamation mr-1"></i> Incorreta'}
-            </span>
-          </div>
-
-          <p class="font-semibold text-gray-200">${q.pergunta}</p>
-
-          <div class="grid grid-cols-2 gap-2 text-[11px] pt-1">
-            <div class="p-2 rounded bg-gray-900/80 border border-gray-800">
-              <span class="text-gray-400 block text-[10px]">Sua resposta:</span>
-              <span class="font-bold ${isCorrect ? "text-emerald-400" : "text-red-400"}">${userDisplay}</span>
-            </div>
-            <div class="p-2 rounded bg-gray-900/80 border border-gray-800">
-              <span class="text-gray-400 block text-[10px]">Gabarito oficial:</span>
-              <span class="font-bold text-amber-400">${correctDisplay}</span>
-            </div>
-          </div>
-
-          <div class="mt-2 pt-2 border-t border-gray-800/80">
-            <span class="text-[10px] font-bold text-amber-300 uppercase tracking-wide flex items-center">
-              <i class="fa-solid fa-lightbulb mr-1.5 text-amber-400"></i> Debriefing Pedagógico:
-            </span>
-            <p class="text-gray-300 mt-1 leading-relaxed text-[11px]">
-              ${q.debriefing}
-            </p>
-          </div>
+          <div class="option-indicator">${op.valor.length === 1 ? op.valor : "●"}</div>
+          <div>${op.texto}</div>
         `;
-
         container.appendChild(card);
       });
     }
 
-    async function syncDataToGoogleSheets() {
-      const url = storedSheetUrl.trim();
-      const syncBox = document.getElementById("sheet-sync-box");
-      const syncIcon = document.getElementById("sync-icon");
-      const syncLabel = document.getElementById("sync-label");
-      const syncBadge = document.getElementById("sync-badge");
-      const syncDetail = document.getElementById("sync-detail");
-      const btnResync = document.getElementById("btn-resync");
+    function selecionarOpcao(elemento, valor) {
+      document.querySelectorAll(".option-card").forEach(c => c.classList.remove("selected"));
+      elemento.classList.add("selected");
+      opcaoSelecionada = valor;
+      document.getElementById("btn-next").disabled = false;
+    }
 
-      btnResync.classList.add("hidden");
-      syncIcon.className = "fa-solid fa-circle-notch fa-spin text-amber-400 mr-2";
-      syncLabel.textContent = "Sincronizando com a planilha...";
-      syncBadge.className = "px-2 py-0.5 text-[10px] rounded bg-amber-500/20 text-amber-300 font-mono";
-      syncBadge.textContent = "Enviando";
+    function proximaQuestao() {
+      if (!opcaoSelecionada) return;
 
-      let correctCount = 0;
-      QUIZ_QUESTIONS.forEach(q => {
-        if (userAnswers[q.id] === q.gabarito) correctCount++;
+      const qAtual = questoes[indiceAtual];
+      respostasUsuario[`q${qAtual.id}`] = opcaoSelecionada;
+
+      indiceAtual++;
+      if (indiceAtual < questoes.length) {
+        carregarQuestao();
+      } else {
+        finalizarQuiz();
+      }
+    }
+
+    function finalizarQuiz() {
+      document.getElementById("progress-fill").style.width = "100%";
+      document.getElementById("label-porcentagem").textContent = "100%";
+
+      document.getElementById("screen-quiz").classList.remove("active");
+      document.getElementById("progress-wrapper").style.display = "none";
+      document.getElementById("screen-result").classList.add("active");
+
+      // Calcula pontuação
+      let acertos = 0;
+      const debriefContainer = document.getElementById("debrief-container");
+      debriefContainer.innerHTML = "";
+
+      questoes.forEach(q => {
+        const respDada = respostasUsuario[`q${q.id}`];
+        const acertou = respDada === q.correta;
+        if (acertou) acertos++;
+
+        const card = document.createElement("div");
+        card.className = `debrief-card ${acertou ? "" : "errou"}`;
+        card.innerHTML = `
+          <h4>Q${q.id} - ${acertou ? "✅ Correto" : "❌ Atenção"} (Sua resposta: ${respDada})</h4>
+          <p>${q.debriefing}</p>
+        `;
+        debriefContainer.appendChild(card);
       });
-      const percentage = Math.round((correctCount / QUIZ_QUESTIONS.length) * 100);
 
-      // Payload structure
-      const payload = {
-        nome: currentUser.name,
-        matricula: currentUser.id,
-        unidade: currentUser.unit,
-        acertos: correctCount,
-        total: QUIZ_QUESTIONS.length,
-        percentual: percentage,
-        timestamp: new Date().toISOString(),
-        respostas: {
-          q1: userAnswers[1] || "",
-          q2: userAnswers[2] || "",
-          q3: userAnswers[3] || "",
-          q4: userAnswers[4] || "",
-          q5: userAnswers[5] || "",
-          q6: userAnswers[6] || "",
-          q7: userAnswers[7] || "",
-          q8: userAnswers[8] || "",
-          q9: userAnswers[9] || "",
-          q10: userAnswers[10] || "",
-          q11: userAnswers[11] || "",
-          q12: userAnswers[12] || ""
-        }
-      };
+      document.getElementById("score-circle").textContent = `${acertos}/12`;
+      
+      const feedEl = document.getElementById("result-feedback");
+      if (acertos >= 10) {
+        feedEl.textContent = "Excelente! Conduta preventiva nota 10!";
+      } else if (acertos >= 7) {
+        feedEl.textContent = "Bom trabalho! Revise os pontos de atenção.";
+      } else {
+        feedEl.textContent = "Importante redobrar a atenção aos procedimentos.";
+      }
 
-      // If no valid URL configured, simulate local success and provide instructor reminder
-      if (!url || !url.startsWith("http")) {
-        setTimeout(() => {
-          syncIcon.className = "fa-solid fa-circle-info text-amber-400 mr-2";
-          syncLabel.textContent = "Modo de Teste / Sem URL configurada";
-          syncBadge.className = "px-2 py-0.5 text-[10px] rounded bg-gray-700 text-gray-300 font-mono";
-          syncBadge.textContent = "Modo Local";
-          syncDetail.innerHTML = `Para gravar diretamente no Google Sheets, clique em <strong class="text-amber-300 cursor-pointer" onclick="openConfigModal()">Configurar Link</strong> no topo e adicione o link do Apps Script.`;
-        }, 600);
+      // Envio automático para o Google Sheets
+      enviarDadosSheets(acertos);
+    }
+
+    async function enviarDadosSheets(acertos) {
+      const statusEl = document.getElementById("sync-status");
+
+      if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "SUA_URL_DO_APPS_SCRIPT_AQUI") {
+        statusEl.className = "sync-status warn";
+        statusEl.textContent = "⚠️ Salvo no aparelho (URL da planilha não configurada no ⚙️).";
         return;
       }
 
+      statusEl.className = "sync-status";
+      statusEl.textContent = "Gravando na planilha...";
+
+      const payload = {
+        nome: usuario.nome,
+        matricula: usuario.matricula,
+        unidade: usuario.unidade,
+        score: acertos,
+        total: questoes.length,
+        respostas: respostasUsuario
+      };
+
       try {
-        // Envio via fetch com mode: 'no-cors' para Apps Script Web App
-        await fetch(url, {
+        // Envio com 'no-cors' e 'text/plain' para compatibilidade total com Google Script
+        await fetch(GOOGLE_SCRIPT_URL, {
           method: "POST",
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8"
-          },
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify(payload)
         });
 
-        // Apps script executed successfully
-        syncIcon.className = "fa-solid fa-circle-check text-emerald-400 mr-2";
-        syncLabel.textContent = "Enviado com sucesso para a planilha!";
-        syncBadge.className = "px-2 py-0.5 text-[10px] rounded bg-emerald-500/20 text-emerald-300 font-mono";
-        syncBadge.textContent = "Gravado";
-        syncDetail.textContent = `Os dados de ${currentUser.name} foram computados na planilha Google Sheets.`;
+        statusEl.className = "sync-status ok";
+        statusEl.textContent = "✅ Respostas registradas na planilha!";
       } catch (err) {
-        console.error("Erro no envio:", err);
-        syncIcon.className = "fa-solid fa-triangle-exclamation text-red-400 mr-2";
-        syncLabel.textContent = "Falha temporária ao sincronizar";
-        syncBadge.className = "px-2 py-0.5 text-[10px] rounded bg-red-500/20 text-red-300 font-mono";
-        syncBadge.textContent = "Erro";
-        syncDetail.textContent = "Verifique sua conexão ou valide se a URL do Web App está configurada como 'Qualquer pessoa'.";
-        btnResync.classList.remove("hidden");
+        console.error("Falha no envio:", err);
+        statusEl.className = "sync-status warn";
+        statusEl.textContent = "⚠️ Conexão oscilando. Tente novamente mais tarde.";
       }
     }
 
-    function openConfigModal() {
-      document.getElementById("config-modal").classList.remove("hidden");
-      document.getElementById("cfg-sheet-url").value = storedSheetUrl;
+    function reiniciar() {
+      document.getElementById("nome").value = "";
+      document.getElementById("matricula").value = "";
+      document.getElementById("unidade").value = "";
+      document.getElementById("screen-result").classList.remove("active");
+      document.getElementById("screen-intro").classList.add("active");
     }
 
-    function closeConfigModal() {
-      document.getElementById("config-modal").classList.add("hidden");
-      document.getElementById("test-result-msg").classList.add("hidden");
+    // GESTÃO DE CONFIGURAÇÃO VIA MODAL
+    function abrirModalConfig() {
+      document.getElementById("input-endpoint").value = 
+        GOOGLE_SCRIPT_URL !== "SUA_URL_DO_APPS_SCRIPT_AQUI" ? GOOGLE_SCRIPT_URL : "";
+      document.getElementById("modal-config").classList.add("active");
     }
 
-    function saveSheetUrl() {
-      const val = document.getElementById("cfg-sheet-url").value.trim();
-      storedSheetUrl = val;
-      localStorage.setItem("necta_sheets_url", val);
-      updateSheetBadge();
-      showToast("URL da planilha salva com sucesso!", "fa-circle-check");
-      closeConfigModal();
+    function fecharModalConfig() {
+      document.getElementById("modal-config").classList.remove("active");
     }
 
-    async function testConnection() {
-      const val = document.getElementById("cfg-sheet-url").value.trim();
-      const msg = document.getElementById("test-result-msg");
-      msg.classList.remove("hidden");
-
-      if (!val || !val.startsWith("http")) {
-        msg.className = "text-[11px] p-2.5 rounded-lg bg-red-900/40 text-red-200 border border-red-700";
-        msg.textContent = "Por favor, insira uma URL válida do Apps Script (começando com https://).";
-        return;
+    function salvarConfig() {
+      const url = document.getElementById("input-endpoint").value.trim();
+      if (url) {
+        GOOGLE_SCRIPT_URL = url;
+        localStorage.setItem("necta_quiz_endpoint", url);
       }
-
-      msg.className = "text-[11px] p-2.5 rounded-lg bg-amber-900/40 text-amber-200 border border-amber-700";
-      msg.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Testando envio de teste para o Web App...';
-
-      try {
-        await fetch(val, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({
-            nome: "TESTE DE CONEXÃO",
-            matricula: "00000",
-            unidade: "Sistema Teste",
-            acertos: 12,
-            total: 12,
-            percentual: 100,
-            timestamp: new Date().toISOString(),
-            respostas: { q1: "Teste" }
-          })
-        });
-
-        msg.className = "text-[11px] p-2.5 rounded-lg bg-emerald-900/40 text-emerald-200 border border-emerald-700";
-        msg.innerHTML = '<i class="fa-solid fa-check mr-1"></i> Conexão enviada! Verifique se uma linha apareceu na sua planilha.';
-      } catch (err) {
-        msg.className = "text-[11px] p-2.5 rounded-lg bg-red-900/40 text-red-200 border border-red-700";
-        msg.textContent = "Não foi possível conectar. Verifique se publicou o Web App com permissão 'Qualquer pessoa'.";
-      }
-    }
-
-    function toggleScriptGuide() {
-      const guide = document.getElementById("script-guide");
-      const chevron = document.getElementById("guide-chevron");
-      guide.classList.toggle("hidden");
-      chevron.classList.toggle("fa-chevron-down");
-      chevron.classList.toggle("fa-chevron-up");
-    }
-
-    function copyAppsScript() {
-      const codeText = document.getElementById("appscript-code").innerText;
-      const dummy = document.createElement("textarea");
-      dummy.value = codeText;
-      document.body.appendChild(dummy);
-      dummy.select();
-      document.execCommand("copy");
-      document.body.removeChild(dummy);
-      showToast("Código Apps Script copiado!", "fa-copy");
-    }
-
-    function restartQuiz() {
-      document.getElementById("screen-welcome").classList.remove("hidden");
-      document.getElementById("screen-quiz").classList.add("hidden");
-      document.getElementById("screen-result").classList.add("hidden");
-      userAnswers = {};
-      currentQuestionIndex = 0;
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function shareScore() {
-      let correct = 0;
-      QUIZ_QUESTIONS.forEach(q => {
-        if (userAnswers[q.id] === q.gabarito) correct++;
-      });
-      const textToShare = `Participei do Workshop Direção Preventiva SIPAT Necta e acertei ${correct}/12 questões! 🚗🛡️`;
-
-      if (navigator.share) {
-        navigator.share({
-          title: "Workshop Direção Preventiva - SIPAT Necta",
-          text: textToShare,
-          url: window.location.href
-        }).catch(() => {});
-      } else {
-        const dummy = document.createElement("textarea");
-        dummy.value = textToShare;
-        document.body.appendChild(dummy);
-        dummy.select();
-        document.execCommand("copy");
-        document.body.removeChild(dummy);
-        showToast("Resultado copiado para a área de transferência!", "fa-share-nodes");
-      }
-    }
-
-    function showToast(text, iconClass = "fa-circle-check") {
-      const toast = document.getElementById("toast");
-      const toastMsg = document.getElementById("toast-message");
-      const toastIcon = document.getElementById("toast-icon");
-
-      toastMsg.textContent = text;
-      toastIcon.className = `fa-solid ${iconClass} text-amber-400`;
-
-      toast.classList.remove("opacity-0", "pointer-events-none");
-      toast.classList.add("opacity-100");
-
-      setTimeout(() => {
-        toast.classList.add("opacity-0", "pointer-events-none");
-        toast.classList.remove("opacity-100");
-      }, 3200);
+      fecharModalConfig();
     }
   </script>
 </body>
